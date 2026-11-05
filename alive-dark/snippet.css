@@ -1,0 +1,978 @@
+/* ==========================================================================
+   Alive-Dark Theme for RemNote
+   Kinetic ergonomics: a calm, warm-slate dark theme (see ergo-dark) that
+   responds to you. Physics-based Bezier motion, depth-of-field focus
+   dimming, living bullet threads and tactile micro-interactions.
+   Author: Rafael Freitas (https://github.com/rpfreitasxyz)
+   Repository: https://github.com/rpfreitasxyz/remnote_theme_plugins
+   ==========================================================================
+
+   DESIGN PRINCIPLES
+   1. Static comfort first: same anti-halation palette logic as ergo-dark
+      (warm slate surface, parchment text, 525nm teal accent).
+   2. Motion is information, never decoration: every animation answers an
+      action (focus, hover, click, create, open) and is < 600ms.
+   3. Asymmetric easing: things arrive FAST (feedback) and leave SLOW
+      (defocus), so the eye is never yanked away from the work.
+   4. Only transform / opacity / shadow are animated: compositor-friendly,
+      no layout thrash while typing.
+   5. prefers-reduced-motion disables every animation (see the end).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Tokens: palette, easing curves, durations
+   -------------------------------------------------------------------------- */
+:root,
+.dark,
+body.dark,
+[data-theme="dark"] {
+  /* Surfaces: warm slate, anti-halation */
+  --ad-bg-editor: #1b1d20;
+  --ad-bg-sidebar: #151719;
+  --ad-bg-elevated: #232629;
+  --ad-bg-surface: #292d31;
+  --ad-bg-hover: #2f3338;
+  --ad-bg-input: #17191b;
+
+  /* Structure */
+  --ad-border-subtle: #272a2e;
+  --ad-border-medium: #33373c;
+  --ad-border-strong: #454a51;
+
+  /* Text: warm parchment, no blue glare */
+  --ad-text: #d8d4cb;
+  --ad-text-bright: #efebe2;
+  --ad-text-muted: #98958d;
+  --ad-text-subtle: #6a6862;
+
+  /* Accents */
+  --ad-accent: #7ec4b6;          /* eucalyptus teal, ~525nm */
+  --ad-accent-hi: #a3dccf;
+  --ad-accent-rgb: 126, 196, 182;
+  --ad-amber: #e2b475;           /* memory / emphasis */
+  --ad-amber-rgb: 226, 180, 117;
+  --ad-sage: #a3be8c;
+  --ad-code: #d89b7a;
+
+  /* Thread + bullet */
+  --ad-thread: #30353a;
+  --ad-bullet: #6b6f74;
+
+  /* Highlights (iso-luminant) */
+  --ad-hl-red: #d67c7c;
+  --ad-hl-orange: #de9e6c;
+  --ad-hl-yellow: #d9be72;
+  --ad-hl-green: #89b882;
+  --ad-hl-blue: #7aa8c7;
+  --ad-hl-purple: #b491c8;
+
+  /* Easing curves */
+  --ad-ease-out: cubic-bezier(0.16, 1, 0.3, 1);        /* expo-out: arrive */
+  --ad-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot: tactile */
+  --ad-ease-defocus: cubic-bezier(0.45, 0, 0.15, 1);   /* soft fade away */
+  --ad-ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Durations */
+  --ad-t-fast: 140ms;
+  --ad-t-base: 260ms;
+  --ad-t-slow: 520ms;
+  --ad-t-defocus: 700ms;
+
+  /* Context dimming level for unfocused blocks */
+  --ad-dim: 0.4;
+
+  /* RemNote token overrides */
+  --rn-clr-background-primary: var(--ad-bg-editor);
+  --rn-clr-background-secondary: var(--ad-bg-sidebar);
+  --rn-clr-background-tertiary: #101113;
+  --rn-clr-background-elevation-10: var(--ad-bg-editor);
+  --rn-clr-background-elevation-50: var(--ad-bg-elevated);
+  --rn-clr-background-elevation-100: var(--ad-bg-surface);
+  --rn-clr-border-opaque: var(--ad-border-subtle);
+  --rn-clr-content-primary: var(--ad-text);
+  --rn-clr-content-secondary: var(--ad-text-muted);
+  --rn-clr-content-tertiary: var(--ad-text-subtle);
+  --rn-clr-background-accent: var(--ad-accent);
+  --rn-clr-background-light-accent: rgba(var(--ad-accent-rgb), 0.1);
+
+  --rn-colors-gray-0: var(--ad-bg-sidebar);
+  --rn-colors-gray-5: var(--ad-bg-editor);
+  --rn-colors-gray-10: var(--ad-bg-elevated);
+  --rn-colors-gray-20: var(--ad-border-subtle);
+  --rn-colors-gray-30: var(--ad-border-medium);
+  --rn-colors-gray-60: var(--ad-text-subtle);
+  --rn-colors-gray-80: var(--ad-text);
+  --rn-colors-gray-100: var(--ad-text-bright);
+}
+
+/* --------------------------------------------------------------------------
+   2. Keyframes
+   -------------------------------------------------------------------------- */
+/* New block settles into place */
+@keyframes ad-rise {
+  from { opacity: 0; transform: translateY(8px) scale(0.992); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Popups / menus / dialogs */
+@keyframes ad-pop {
+  from { opacity: 0; transform: translateY(6px) scale(0.965); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Flashcard enters like a card being dealt */
+@keyframes ad-deal {
+  from { opacity: 0; transform: translateY(18px) rotate(-0.4deg) scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Slow breathing glow around the block you are writing in */
+@keyframes ad-breathe {
+  0%, 100% { box-shadow: inset 2px 0 0 rgba(var(--ad-accent-rgb), 0.85),
+                         0 0 0 0 rgba(var(--ad-accent-rgb), 0); }
+  50%      { box-shadow: inset 2px 0 0 rgba(var(--ad-accent-rgb), 1),
+                         0 0 22px 0 rgba(var(--ad-accent-rgb), 0.10); }
+}
+
+/* Spotlight drifts very slowly: life without distraction */
+@keyframes ad-drift {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* Focused bullet pulses like a heartbeat */
+@keyframes ad-heartbeat {
+  0%, 100% { transform: scale(1.18); }
+  50%      { transform: scale(1.42); }
+}
+
+/* Checkbox pops when checked */
+@keyframes ad-check-pop {
+  0%   { transform: scale(0.7); }
+  55%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+/* Today dot breathes */
+@keyframes ad-dot {
+  0%, 100% { opacity: 0.45; transform: scale(0.9); }
+  50%      { opacity: 1;    transform: scale(1.25); }
+}
+
+/* Thread grows downward from its parent bullet */
+@keyframes ad-grow {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+/* --------------------------------------------------------------------------
+   3. Global surface, ambient light & selection
+   -------------------------------------------------------------------------- */
+html,
+body,
+#root,
+.rn-layout,
+.rn-pane,
+.rn-pane__body {
+  background-color: var(--ad-bg-editor) !important;
+  color: var(--ad-text) !important;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Ambient light: two very faint colour pools, like a lamp off-screen */
+.rn-pane__body {
+  background-image:
+    radial-gradient(900px 520px at 85% -8%, rgba(var(--ad-accent-rgb), 0.045), transparent 70%),
+    radial-gradient(760px 480px at 8% 108%, rgba(var(--ad-amber-rgb), 0.03), transparent 70%) !important;
+  background-attachment: fixed !important;
+}
+
+/* Caret and selection: the two things you stare at while typing */
+.EditorContainer,
+[contenteditable="true"],
+input,
+textarea {
+  caret-color: var(--ad-accent) !important;
+}
+
+::selection {
+  background: rgba(var(--ad-accent-rgb), 0.28);
+  color: var(--ad-text-bright);
+}
+
+/* Smooth scrolling for keyboard / wheel jumps */
+* {
+  scroll-behavior: smooth;
+}
+
+/* --------------------------------------------------------------------------
+   4. Sidebar, top bar & navigation (peripheral vignette + tactile hover)
+   -------------------------------------------------------------------------- */
+#document-sidebar,
+.rn-sidebar,
+.rn-document-sidebar,
+.rn-navigation-bar,
+.top-bar-container,
+.rn-pane__top-bar {
+  background-color: var(--ad-bg-sidebar) !important;
+  border-color: var(--ad-border-subtle) !important;
+}
+
+#document-sidebar,
+.rn-sidebar {
+  border-right: 1px solid var(--ad-border-subtle) !important;
+}
+
+.rn-document-sidebar {
+  border-left: 1px solid var(--ad-border-subtle) !important;
+}
+
+.top-bar-container,
+.rn-pane__top-bar {
+  border-bottom: 1px solid var(--ad-border-subtle) !important;
+}
+
+/* Sidebar rows slide a few pixels toward you on hover, spring back on leave */
+.rn-document-sidebar__top-link {
+  position: relative;
+  transition:
+    transform var(--ad-t-slow) var(--ad-ease-spring),
+    background-color var(--ad-t-base) var(--ad-ease-out),
+    color var(--ad-t-base) var(--ad-ease-out);
+}
+
+.rn-document-sidebar__top-link:hover {
+  transform: translateX(3px);
+  transition-duration: var(--ad-t-base), var(--ad-t-fast), var(--ad-t-fast);
+}
+
+.rn-document-sidebar__top-link:active {
+  transform: translateX(1px) scale(0.985);
+}
+
+/* Current page marker */
+.bg-gray-10,
+.dark\:bg-gray-10 {
+  background-color: var(--ad-bg-surface) !important;
+  color: var(--ad-text-bright) !important;
+}
+
+.rn-document-sidebar__top-link.bg-gray-10 {
+  box-shadow: inset 2px 0 0 var(--ad-accent);
+}
+
+.rn-sidebar-flashcards-link:hover,
+.rn-nav-tab-button:hover,
+.rn-settings__link:hover {
+  background-color: var(--ad-bg-elevated) !important;
+  color: var(--ad-text-bright) !important;
+  border-radius: 6px;
+}
+
+.rn-nav-tab-button[data-cy-active="true"],
+[data-cy-active="true"] {
+  border-bottom: 2px solid var(--ad-accent) !important;
+  color: var(--ad-text-bright) !important;
+}
+
+/* "Today" header: accent colour with a breathing dot */
+.text-cyan-60 {
+  color: var(--ad-accent) !important;
+}
+
+.text-cyan-60 > .text-base.text-current {
+  display: inline-block;
+  animation: ad-dot 3.6s var(--ad-ease-inout) infinite;
+}
+
+/* --------------------------------------------------------------------------
+   5. Typography
+   -------------------------------------------------------------------------- */
+.rn-editor-container,
+.rn-document,
+.rn-document-wrapper,
+.rem-text,
+.rn-editor__rem__body__text {
+  color: var(--ad-text) !important;
+  line-height: 1.68;
+  letter-spacing: 0.008em;
+}
+
+.rn-text-heading-title,
+.rn-page-header-mobile,
+.rn-article-header {
+  color: var(--ad-text-bright) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.015em;
+}
+
+.rn-editor__rem__body__text--h1,
+.rn-text-heading-large {
+  color: var(--ad-text-bright) !important;
+  font-weight: 600 !important;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--ad-border-subtle);
+}
+
+.rn-editor__rem__body__text--h2,
+.rn-text-heading-medium {
+  color: #e6e1d7 !important;
+  font-weight: 600 !important;
+}
+
+.rn-editor__rem__body__text--h3,
+.rn-text-heading-small {
+  color: #ddd8ce !important;
+  font-weight: 600 !important;
+}
+
+b,
+strong,
+.bold {
+  color: var(--ad-amber) !important;
+  font-weight: 600 !important;
+}
+
+i,
+em,
+.italic {
+  color: var(--ad-sage) !important;
+  font-style: italic;
+}
+
+u,
+.underline {
+  text-decoration-color: var(--ad-accent) !important;
+  text-underline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   6. Blocks: arrival, glide and hover
+   -------------------------------------------------------------------------- */
+/* A newly created block (Enter, paste, expand) rises into place */
+.rn-editor-container {
+  animation: ad-rise var(--ad-t-slow) var(--ad-ease-out) backwards;
+  /* When lines above grow/shrink, everything below glides instead of jumping */
+  transition:
+    top var(--ad-t-base) var(--ad-ease-out),
+    min-height var(--ad-t-base) var(--ad-ease-out),
+    opacity var(--ad-t-defocus) var(--ad-ease-defocus);
+}
+
+/* Subtle row highlight under the pointer */
+.tree-node--parent {
+  border-radius: 6px;
+  transition:
+    background-color var(--ad-t-slow) var(--ad-ease-defocus),
+    box-shadow var(--ad-t-slow) var(--ad-ease-defocus);
+}
+
+.tree-node--parent:hover {
+  background-color: rgba(255, 255, 255, 0.022);
+  transition-duration: var(--ad-t-fast);
+  transition-timing-function: var(--ad-ease-out);
+}
+
+/* --------------------------------------------------------------------------
+   7. FOCUS MODE: depth-of-field for your attention
+   --------------------------------------------------------------------------
+   While a block has the caret, every other block steps back (opacity only,
+   so text stays crisp). Hovering one brings it forward. Leaving is slow,
+   arriving is fast: the eye is never yanked.
+
+   DOM note: RemNote flattens blocks into siblings grouped by depth, but each
+   block is always immediately followed by its own thread:
+     container(A) > thread(A) ... container(B) > thread(B) ...
+   so ".rn-editor-container:focus-within + .TreeNode" is the thread of the
+   focused block's children (used in section 8). */
+body:has(.rem-container:focus-within) .rn-editor-container:not(:focus-within) {
+  opacity: var(--ad-dim) !important;
+}
+
+/* Pointer peek: hovering a dimmed block lifts it to near-full legibility */
+body:has(.rem-container:focus-within) .rn-editor-container:not(:focus-within):hover {
+  opacity: 0.92 !important;
+  transition-duration: var(--ad-t-base);
+  transition-timing-function: var(--ad-ease-out);
+}
+
+/* Arriving at focus is fast */
+.rn-editor-container:focus-within {
+  transition-duration: var(--ad-t-fast), var(--ad-t-fast), var(--ad-t-fast);
+  transition-timing-function: var(--ad-ease-out);
+}
+
+/* The focused block: spotlight + gutter bar + breathing glow.
+   Uses box-shadow (no border/padding) so text never shifts on focus. */
+.tree-node--parent:focus-within {
+  background-image: linear-gradient(
+    100deg,
+    rgba(var(--ad-accent-rgb), 0.085) 0%,
+    rgba(var(--ad-accent-rgb), 0.03) 38%,
+    rgba(var(--ad-amber-rgb), 0.02) 70%,
+    rgba(var(--ad-accent-rgb), 0.085) 100%
+  );
+  background-size: 200% 100%;
+  box-shadow: inset 2px 0 0 var(--ad-accent);
+  transition-duration: var(--ad-t-fast);
+  transition-timing-function: var(--ad-ease-out);
+  animation:
+    ad-breathe 5.5s var(--ad-ease-inout) infinite,
+    ad-drift 22s linear infinite;
+}
+
+/* --------------------------------------------------------------------------
+   8. Bullet threads: they grow, and light up along the branch you are on
+   -------------------------------------------------------------------------- */
+/* The native 1px border is replaced by two pseudo-element lines:
+   ::before = resting thread, ::after = live accent that grows downward */
+.TreeNode.tree-node--children {
+  border-left: 0 !important;
+  opacity: 1 !important;
+  transition:
+    top var(--ad-t-base) var(--ad-ease-out),
+    height var(--ad-t-base) var(--ad-ease-out);
+}
+
+/* Root container must never draw a line to the left of every bullet */
+#hierarchy-editor.TreeNode,
+.flattened-children-node:not(.tree-node--children) {
+  border-left: 0 !important;
+}
+
+.TreeNode.tree-node--children::before,
+.TreeNode.tree-node--children::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.TreeNode.tree-node--children::before {
+  background: var(--ad-thread);
+  transition: background-color var(--ad-t-slow) var(--ad-ease-defocus);
+}
+
+.TreeNode.tree-node--children::after {
+  background: linear-gradient(
+    to bottom,
+    var(--ad-accent) 0%,
+    rgba(var(--ad-accent-rgb), 0.55) 70%,
+    rgba(var(--ad-accent-rgb), 0.15) 100%
+  );
+  box-shadow: 0 0 10px rgba(var(--ad-accent-rgb), 0.45);
+  transform: scaleY(0);
+  transform-origin: top;
+  opacity: 0;
+  transition:
+    transform var(--ad-t-slow) var(--ad-ease-defocus),
+    opacity var(--ad-t-slow) var(--ad-ease-defocus);
+}
+
+/* The thread that follows a block lights up when that block is hovered or
+   focused (adjacent-sibling trick, see section 7). It grows with a spring. */
+.rn-editor-container:hover + .TreeNode.tree-node--children::after,
+.rn-editor-container:focus-within + .TreeNode.tree-node--children::after {
+  transform: scaleY(1);
+  opacity: 1;
+  transition:
+    transform 640ms var(--ad-ease-out),
+    opacity var(--ad-t-fast) var(--ad-ease-out);
+}
+
+.rn-editor-container:focus-within + .TreeNode.tree-node--children::before {
+  background: rgba(var(--ad-accent-rgb), 0.18);
+}
+
+/* Threads follow the dimming of focus mode */
+body:has(.rem-container:focus-within)
+  .rn-editor-container:not(:focus-within) + .TreeNode.tree-node--children {
+  opacity: 0.45 !important;
+}
+
+/* --------------------------------------------------------------------------
+   9. Bullets: spring on hover, squish on click, heartbeat on focus
+   -------------------------------------------------------------------------- */
+.rn-bullet-container,
+.rem-bullet__container {
+  opacity: 1 !important;
+}
+
+/* Phantom "add block" bullet at the top stays invisible until hovered */
+.rn-add-rem-button:not(:hover) .rn-bullet-container {
+  opacity: 0 !important;
+}
+
+.rn-rem-bullet,
+.rem-bullet,
+.perfect-circle,
+.perfect-circle__inner {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.perfect-circle {
+  transition: transform 460ms var(--ad-ease-spring);
+}
+
+.rem-bullet__core {
+  fill: var(--ad-bullet) !important;
+  transition:
+    fill var(--ad-t-slow) var(--ad-ease-defocus),
+    filter var(--ad-t-slow) var(--ad-ease-defocus);
+}
+
+.rem-bullet__ring {
+  fill: transparent !important;
+  transition: fill var(--ad-t-slow) var(--ad-ease-defocus);
+}
+
+.rn-bullet-container:hover .perfect-circle {
+  transform: scale(1.4);
+  transition-duration: 320ms;
+}
+
+.rn-bullet-container:hover .rem-bullet__core {
+  fill: var(--ad-accent) !important;
+  filter: drop-shadow(0 0 5px rgba(var(--ad-accent-rgb), 0.6));
+  transition-duration: var(--ad-t-fast);
+}
+
+.rn-bullet-container:hover .rem-bullet__ring {
+  fill: rgba(var(--ad-accent-rgb), 0.16) !important;
+  transition-duration: var(--ad-t-fast);
+}
+
+.rn-bullet-container:active .perfect-circle {
+  transform: scale(0.8);
+  transition-duration: 90ms;
+}
+
+/* The bullet of the block you are typing in beats like a slow heart */
+.rem-container:focus-within .rem-bullet__core {
+  fill: var(--ad-accent) !important;
+  filter: drop-shadow(0 0 6px rgba(var(--ad-accent-rgb), 0.7));
+}
+
+.rem-container:focus-within .perfect-circle {
+  animation: ad-heartbeat 3.2s var(--ad-ease-inout) infinite;
+}
+
+/* --------------------------------------------------------------------------
+   10. References, links & tags: underline sweeps in from the left
+   -------------------------------------------------------------------------- */
+.rn-rem-reference,
+.rem-reference {
+  background-color: rgba(var(--ad-accent-rgb), 0.07) !important;
+  background-image: linear-gradient(var(--ad-accent-hi), var(--ad-accent-hi)) !important;
+  background-repeat: no-repeat !important;
+  background-position: 0 100% !important;
+  background-size: 0% 1.5px !important;
+  border: 0 !important;
+  border-bottom: 1.5px solid rgba(var(--ad-accent-rgb), 0.32) !important;
+  border-radius: 3px !important;
+  color: #8fcdbf !important;
+  padding: 0 5px !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  transition:
+    background-size 520ms var(--ad-ease-out),
+    background-color var(--ad-t-base) var(--ad-ease-out),
+    color var(--ad-t-base) var(--ad-ease-out),
+    box-shadow var(--ad-t-slow) var(--ad-ease-defocus);
+}
+
+.rn-rem-reference:hover,
+.rem-reference:hover {
+  background-size: 100% 1.5px !important;
+  background-color: rgba(var(--ad-accent-rgb), 0.16) !important;
+  color: var(--ad-accent-hi) !important;
+  box-shadow: 0 2px 14px rgba(var(--ad-accent-rgb), 0.22);
+  transition-duration: 520ms, var(--ad-t-fast), var(--ad-t-fast), var(--ad-t-fast);
+}
+
+.icon-in-reference {
+  color: var(--ad-accent) !important;
+  opacity: 0.85;
+}
+
+a,
+.text-blue-60,
+.text-blue-80 {
+  color: #8fcdbf !important;
+  text-decoration: none !important;
+  background-image: linear-gradient(var(--ad-accent-hi), var(--ad-accent-hi));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1.5px;
+  border-bottom: 1.5px solid rgba(var(--ad-accent-rgb), 0.32) !important;
+  transition:
+    background-size 520ms var(--ad-ease-out),
+    color var(--ad-t-base) var(--ad-ease-out);
+}
+
+a:hover {
+  color: var(--ad-accent-hi) !important;
+  background-size: 100% 1.5px;
+}
+
+.rn-work-in-progress-tag {
+  background-color: rgba(163, 190, 140, 0.1) !important;
+  border: 1px solid rgba(163, 190, 140, 0.28) !important;
+  color: var(--ad-sage) !important;
+  border-radius: 4px !important;
+  padding: 1px 6px !important;
+  font-size: 0.88em !important;
+}
+
+/* --------------------------------------------------------------------------
+   11. Code, quotes, dividers
+   -------------------------------------------------------------------------- */
+code,
+.rn-code-node,
+.rich-text-editor__code-node {
+  background-color: var(--ad-bg-sidebar) !important;
+  color: var(--ad-code) !important;
+  border: 1px solid var(--ad-border-subtle) !important;
+  border-radius: 4px !important;
+  padding: 0.14em 0.38em !important;
+  font-family: "Cascadia Code", "Fira Code", Consolas, monospace !important;
+  font-size: 0.9em !important;
+}
+
+pre,
+.rn-code-node pre {
+  background-color: var(--ad-bg-sidebar) !important;
+  border: 1px solid var(--ad-border-subtle) !important;
+  border-radius: 8px !important;
+  padding: 12px 14px !important;
+}
+
+.rn-quote,
+.rn-quote-inner,
+.rn-quote-content {
+  border-left: 3px solid var(--ad-sage) !important;
+  background-color: rgba(163, 190, 140, 0.05) !important;
+  color: var(--ad-text-muted) !important;
+  font-style: italic;
+  padding: 6px 14px !important;
+  border-radius: 0 6px 6px 0;
+}
+
+.rn-divider,
+.rn-editor-divider {
+  background-color: var(--ad-border-subtle) !important;
+  height: 1px !important;
+  border: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   12. Active recall: clozes & flashcards
+   -------------------------------------------------------------------------- */
+.cloze {
+  background-color: rgba(var(--ad-amber-rgb), 0.11) !important;
+  border-bottom: 2px solid var(--ad-amber) !important;
+  color: var(--ad-amber) !important;
+  border-radius: 3px !important;
+  padding: 0 4px !important;
+  transition:
+    background-color var(--ad-t-slow) var(--ad-ease-defocus),
+    box-shadow var(--ad-t-slow) var(--ad-ease-defocus);
+}
+
+.cloze:hover {
+  background-color: rgba(var(--ad-amber-rgb), 0.22) !important;
+  box-shadow: 0 2px 14px rgba(var(--ad-amber-rgb), 0.25);
+  transition-duration: var(--ad-t-fast);
+  transition-timing-function: var(--ad-ease-out);
+}
+
+.rn-queue,
+.rn-queue-container,
+.rn-flashcards-page-container {
+  background-color: var(--ad-bg-editor) !important;
+}
+
+.rn-queue-rem,
+.rn-question-rem {
+  background-color: var(--ad-bg-elevated) !important;
+  border: 1px solid var(--ad-border-subtle) !important;
+  border-radius: 12px !important;
+  padding: 18px 22px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
+  animation: ad-deal 520ms var(--ad-ease-out) backwards;
+}
+
+.rn-flashcard-delimiter,
+.rn-card-delimiter {
+  color: var(--ad-amber) !important;
+  font-weight: 700 !important;
+}
+
+/* --------------------------------------------------------------------------
+   13. Highlights (iso-luminant, low saturation)
+   -------------------------------------------------------------------------- */
+.highlight-color--red,
+.rn-editor__rem__body--red {
+  background-color: rgba(214, 124, 124, 0.16) !important;
+  border-left: 3px solid var(--ad-hl-red) !important;
+  border-radius: 3px;
+  color: var(--ad-text-bright) !important;
+}
+
+.highlight-color--orange,
+.rn-editor__rem__body--orange {
+  background-color: rgba(222, 158, 108, 0.16) !important;
+  border-left: 3px solid var(--ad-hl-orange) !important;
+  border-radius: 3px;
+  color: var(--ad-text-bright) !important;
+}
+
+.highlight-color--yellow,
+.rn-editor__rem__body--yellow {
+  background-color: rgba(217, 190, 114, 0.16) !important;
+  border-left: 3px solid var(--ad-hl-yellow) !important;
+  border-radius: 3px;
+  color: var(--ad-text-bright) !important;
+}
+
+.highlight-color--green,
+.rn-editor__rem__body--green {
+  background-color: rgba(137, 184, 130, 0.16) !important;
+  border-left: 3px solid var(--ad-hl-green) !important;
+  border-radius: 3px;
+  color: var(--ad-text-bright) !important;
+}
+
+.highlight-color--blue,
+.rn-editor__rem__body--blue {
+  background-color: rgba(122, 168, 199, 0.16) !important;
+  border-left: 3px solid var(--ad-hl-blue) !important;
+  border-radius: 3px;
+  color: var(--ad-text-bright) !important;
+}
+
+.highlight-color--purple,
+.rn-editor__rem__body--purple {
+  background-color: rgba(180, 145, 200, 0.16) !important;
+  border-left: 3px solid var(--ad-hl-purple) !important;
+  border-radius: 3px;
+  color: var(--ad-text-bright) !important;
+}
+
+/* --------------------------------------------------------------------------
+   14. Popups, omnibar, menus: they pop in, results cascade
+   -------------------------------------------------------------------------- */
+.rn-popup,
+.rn-popup-background,
+.rn-dialog,
+.rn-dialog-background,
+.rn-clr-shadow-menu,
+.rn-sort-popup,
+.rn-floating-toolbar-wrapper,
+.rn-floating-toolbar {
+  background-color: var(--ad-bg-elevated) !important;
+  border: 1px solid var(--ad-border-medium) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5) !important;
+  animation: ad-pop var(--ad-t-base) var(--ad-ease-out) backwards;
+  transform-origin: top center;
+}
+
+#search-results__list {
+  background-color: var(--ad-bg-elevated) !important;
+}
+
+#search-results__result {
+  color: var(--ad-text) !important;
+  border-radius: 6px;
+  animation: ad-rise 380ms var(--ad-ease-out) backwards;
+  transition:
+    background-color var(--ad-t-base) var(--ad-ease-defocus),
+    transform var(--ad-t-base) var(--ad-ease-spring);
+}
+
+/* Cascade: first results arrive in sequence, 28ms apart */
+[id="search-results__result"]:nth-child(2) { animation-delay: 28ms; }
+[id="search-results__result"]:nth-child(3) { animation-delay: 56ms; }
+[id="search-results__result"]:nth-child(4) { animation-delay: 84ms; }
+[id="search-results__result"]:nth-child(5) { animation-delay: 112ms; }
+[id="search-results__result"]:nth-child(6) { animation-delay: 140ms; }
+[id="search-results__result"]:nth-child(n+7) { animation-delay: 168ms; }
+
+#search-results__result:hover {
+  background-color: var(--ad-bg-hover) !important;
+  transform: translateX(3px);
+  transition-duration: var(--ad-t-fast), var(--ad-t-base);
+  transition-timing-function: var(--ad-ease-out), var(--ad-ease-spring);
+}
+
+#search-results__result[data-cmdopt-selected="true"] {
+  background-color: var(--ad-accent) !important;
+  color: #121416 !important;
+  font-weight: 600;
+  transform: translateX(3px);
+}
+
+/* --------------------------------------------------------------------------
+   15. Buttons, inputs, checkboxes, switches: tactile feedback
+   -------------------------------------------------------------------------- */
+.rn-button {
+  background-color: var(--ad-bg-elevated) !important;
+  color: var(--ad-text) !important;
+  border: 1px solid var(--ad-border-medium) !important;
+  border-radius: 6px !important;
+  transition:
+    transform var(--ad-t-base) var(--ad-ease-spring),
+    background-color var(--ad-t-base) var(--ad-ease-out),
+    border-color var(--ad-t-base) var(--ad-ease-out),
+    box-shadow var(--ad-t-slow) var(--ad-ease-defocus);
+}
+
+.rn-button:hover {
+  background-color: var(--ad-bg-hover) !important;
+  color: var(--ad-text-bright) !important;
+  border-color: var(--ad-border-strong) !important;
+  transform: translateY(-1px);
+}
+
+.rn-button:active {
+  transform: translateY(0) scale(0.96);
+  transition-duration: 70ms;
+}
+
+/* Primary button: a slow light sweep on hover */
+.rn-button--primary,
+.rn-button.rn-button--primary {
+  background-color: var(--ad-accent) !important;
+  background-image: linear-gradient(
+    110deg,
+    var(--ad-accent) 0%,
+    var(--ad-accent-hi) 45%,
+    var(--ad-accent) 90%
+  ) !important;
+  background-size: 240% 100% !important;
+  background-position: 100% 0 !important;
+  color: #121416 !important;
+  font-weight: 600 !important;
+  border: 1px solid var(--ad-accent) !important;
+  transition:
+    transform var(--ad-t-base) var(--ad-ease-spring),
+    background-position 900ms var(--ad-ease-out),
+    box-shadow var(--ad-t-slow) var(--ad-ease-defocus);
+}
+
+.rn-button--primary:hover,
+.rn-button.rn-button--primary:hover {
+  background-position: 0 0 !important;
+  box-shadow: 0 6px 22px rgba(var(--ad-accent-rgb), 0.3);
+}
+
+input[type="text"],
+input[type="search"],
+textarea,
+.rn-search {
+  background-color: var(--ad-bg-input) !important;
+  border: 1px solid var(--ad-border-medium) !important;
+  color: var(--ad-text) !important;
+  border-radius: 6px !important;
+  padding: 5px 9px !important;
+  outline: none;
+  transition:
+    border-color var(--ad-t-base) var(--ad-ease-out),
+    box-shadow var(--ad-t-slow) var(--ad-ease-out);
+}
+
+input[type="text"]:focus,
+input[type="search"]:focus,
+textarea:focus,
+.rn-search:focus {
+  border-color: var(--ad-accent) !important;
+  box-shadow:
+    0 0 0 3px rgba(var(--ad-accent-rgb), 0.16),
+    0 0 18px rgba(var(--ad-accent-rgb), 0.18) !important;
+}
+
+.rn-checkbox--checked {
+  background-color: var(--ad-accent) !important;
+  border-color: var(--ad-accent) !important;
+  color: #121416 !important;
+  border-radius: 4px !important;
+  animation: ad-check-pop 420ms var(--ad-ease-spring);
+}
+
+.rn-checkbox--unchecked {
+  background-color: var(--ad-bg-input) !important;
+  border-color: var(--ad-border-medium) !important;
+  border-radius: 4px !important;
+  transition: border-color var(--ad-t-base) var(--ad-ease-out);
+}
+
+.rn-checkbox--unchecked:hover {
+  border-color: var(--ad-accent) !important;
+}
+
+.rn-switch {
+  background-color: var(--ad-bg-input) !important;
+  border: 1px solid var(--ad-border-medium) !important;
+  border-radius: 12px !important;
+  transition:
+    background-color var(--ad-t-base) var(--ad-ease-out),
+    border-color var(--ad-t-base) var(--ad-ease-out);
+}
+
+.rn-switch[data-state="checked"] {
+  background-color: var(--ad-accent) !important;
+  border-color: var(--ad-accent) !important;
+}
+
+.rn-switch-handle {
+  transition: transform 360ms var(--ad-ease-spring) !important;
+}
+
+/* --------------------------------------------------------------------------
+   16. Scrollbars: thin, wake up on hover
+   -------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #2f3338;
+  border-radius: 4px;
+  transition: background-color var(--ad-t-base);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(var(--ad-accent-rgb), 0.45);
+}
+
+/* --------------------------------------------------------------------------
+   17. Accessibility: respect "reduce motion"
+   --------------------------------------------------------------------------
+   Everything above is decoration on top of an already-calm static theme.
+   Users who ask the OS for less motion get the static theme only; focus
+   dimming and colours remain, animations and glides are disabled. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}

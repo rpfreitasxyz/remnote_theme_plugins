@@ -1,0 +1,17 @@
+{
+  "manifestVersion": 1,
+  "id": "alive-dark-theme",
+  "name": "Alive-Dark (Kinetic Ergonomics & Bioluminescent Focus)",
+  "author": "Rafael Freitas",
+  "repoUrl": "https://github.com/rpfreitasxyz/remnote_theme_plugins",
+  "enableOnMobile": true,
+  "version": {
+    "major": 1,
+    "minor": 0,
+    "patch": 0
+  },
+  "theme": ["dark"],
+  "description": "A kinetic, bioluminescent dark theme combining visual ergonomics with physics-based cubic-bezier motion, optical depth-of-field focus dimming, living bullet threads, and tactile micro-interactions.",
+  "requestNative": false,
+  "requiredScopes": []
+}

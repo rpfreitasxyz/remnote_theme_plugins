@@ -124,6 +124,9 @@ TOOLBAR = """<script>
     for (const el of [document.documentElement, document.body]) el.classList.toggle('dark');
   };
   document.body.appendChild(host);
+  // ?focus=N foca o N-ésimo bloco do editor (para testar estados :focus-within)
+  const f = new URLSearchParams(location.search).get('focus');
+  if (f !== null) setTimeout(() => document.querySelectorAll('.EditorContainer')[+f]?.focus(), 300);
   poll();
   setInterval(poll, 1000);
 })();

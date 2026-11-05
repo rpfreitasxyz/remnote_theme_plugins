@@ -10,6 +10,7 @@ A lista de temas disponíveis atualmente no repositório:
 - [Antigravity Dark Theme](./antigravity/): Tema escuro inspirado no visual moderno do Google Antigravity IDE, com tons de cinza espacial profundo (`#1f1f1f`), barras de ferramentas em `#181818`, acentos em azul elétrico (`#0078d4`), tipografia refinada e estilização completa para flashcards, omnibar, tabelas e referências.
 - [Vantablack Focus](./vantablack/): Tema ultra-escuro (OLED pitch-black `#000000`) desenvolvido para foco máximo e imersão, com linhas de hierarquia (bullet threading) nítidas e luminosas, âncoras/referências destacadas em azul-gelo suave (`#7dd3fc`) sem fadiga visual, e demarcação de foco evidente para o rem ativo.
 - [Ergo-Dark](./ergo-dark/): Tema escuro cientificamente calibrado com base em ergonomia visual, óptica fisiológica e teoria da carga cognitiva para minimizar astenopia (fadiga ocular) e halação, utilizando superfície em ardósia quente (`#1c1e20`), texto em pergaminho (`#d8d4cb`, contraste ~10.8:1), âncoras em verde-eucalipto (`#7ec4b6`, pico de sensibilidade retiniana em 525nm) e hierarquia semântica pré-atentiva.
+- [Alive-Dark](./alive-dark/): Evolução do ergo-dark com movimento ergonômico em CSS puro: modo foco com profundidade de campo (blocos fora de foco recuam com curvas Bézier assimétricas), bullet threads que crescem e se iluminam, bullets com mola, sublinhados que "desenham" no hover, menus com pop e respeito a `prefers-reduced-motion`.
 
 ## Estrutura do Repositório
 
@@ -20,6 +21,12 @@ remnote_themes/
 ├── LICENSE
 ├── README.md
 ├── package_theme.py
+├── alive-dark/
+│   ├── manifest.json
+│   ├── theme.css
+│   ├── snippet.css
+│   ├── README.md
+│   └── alive-dark-remnote-theme.zip
 ├── antigravity/
 │   ├── manifest.json
 │   ├── theme.css
