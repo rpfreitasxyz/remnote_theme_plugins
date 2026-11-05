@@ -7,14 +7,14 @@ Mantém o conforto ergonômico do [ergo-dark](../ergo-dark/) (ardósia quente, t
 
 Os efeitos, todos feitos apenas com CSS:
 
-- **Modo foco (profundidade de campo):** enquanto você digita em um bloco, todos os outros recuam (apenas opacidade, o texto continua nítido).
-  Passar o mouse sobre um bloco recuado o traz de volta.
-  A saída de foco é lenta (700ms, curva `cubic-bezier(0.45, 0, 0.15, 1)`) e a entrada é rápida (140ms), então o olho nunca é puxado bruscamente.
-- **Bloco ativo:** holofote em gradiente que deriva lentamente, barra de margem em teal e um brilho que "respira" a cada 5,5s.
-  Usa `box-shadow`, então o texto nunca se desloca ao focar.
-- **Bullet threads vivos:** a linha de hierarquia cresce de cima para baixo (`scaleY`) e se ilumina ao longo de toda a sub-árvore do bloco em foco ou sob o mouse.
-- **Bullets táteis:** crescem com mola (`cubic-bezier(0.34, 1.56, 0.64, 1)`) ao passar o mouse, "afundam" ao clicar e o bullet do bloco ativo pulsa como um batimento lento.
-- **Referências e links:** o sublinhado entra da esquerda para a direita no hover.
+- **Modo foco (profundidade de campo) e Palco Zen:** enquanto você digita em um bloco, todos os outros blocos e a periferia da interface (sidebar, barra de topo e carrossel de datas) recuam suavemente para `opacity: 0.35`. Passar o mouse sobre as barras ou sobre qualquer bloco recuado os traz instantaneamente a `1.0`. A saída de foco é suave (700ms) e a entrada é rápida (140ms), para que o olho nunca seja puxado bruscamente.
+- **Bloco ativo:** holofote em gradiente que deriva lentamente, barra de margem em teal e um brilho que "respira" a cada 5,5s. Usa `box-shadow`, então o texto nunca se desloca ao focar.
+- **Despertar semântico na linha ativa:** palavras em **negrito** ganham um leve *bloom* dourado quente (`text-shadow`), termos em *itálico* acendem em sage botânico, referências e links ganham cápsula luminosa e blocos de `código` acendem a borda. A formatação ganha vida sob a sua digitação.
+- **Micro-recompensa de linha nova (Convite à Escrita):** blocos vazios recém-criados ou aguardando digitação exibem um pulso âmbar acolhedor no bullet. No instante em que o primeiro caractere é digitado, o bullet salta com uma curva elástica para o batimento teal esmeralda.
+- **Pulso bioluminescente nos bullet threads:** a linha vertical que liga o pai aos filhos cresce de cima para baixo e, enquanto o pai está em foco, um fluxo de luz bioluminescente percorre continuamente a linha em direção aos descendentes.
+- **Halo orbital em blocos-pai (Pre-attentive Branching):** blocos que possuem filhos exibem um anel orbital suave (`.rem-bullet__ring`) mesmo em repouso, permitindo bater o olho e reconhecer imediatamente a profundidade e densidade de cada tópico da árvore.
+- **Bullets táteis:** crescem com mola (`cubic-bezier(0.34, 1.56, 0.64, 1)`) ao passar o mouse, "afundam" ao clicar e o bullet do bloco ativo pulsa como um batimento cardíaco.
+- **Referências e links:** o sublinhado entra da esquerda para a direita no hover com efeito magnético.
 - **Blocos novos:** sobem suavemente ao serem criados (Enter, colar) e os blocos abaixo deslizam em vez de pular.
 - **Menus e omnibar:** aparecem com um leve "pop" e os resultados da busca surgem em cascata, 28ms entre si.
 - **Controles:** botões com mola e "squish" no clique, botão primário com varredura de luz, checkbox que dá um pop ao marcar, campos com halo de foco.
@@ -51,3 +51,4 @@ Duas opções:
 2. **Custom CSS:** `Ctrl + P`, **Custom CSS**, **Add Blank CSS Block** e cole o conteúdo de `theme.css`.
 
 O modo escuro do RemNote precisa estar ativo.
+

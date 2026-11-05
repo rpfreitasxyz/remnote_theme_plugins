@@ -165,6 +165,24 @@ body.dark,
   to   { transform: scaleY(1); }
 }
 
+/* Light beam pulses downward along active bullet thread */
+@keyframes ad-thread-flow {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 0% 200%; }
+}
+
+/* Fresh / empty block awaiting thought: gentle warm amber invitation */
+@keyframes ad-awaiting-input {
+  0%, 100% {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 3px rgba(var(--ad-amber-rgb), 0.5));
+  }
+  50% {
+    transform: scale(1.36);
+    filter: drop-shadow(0 0 9px rgba(var(--ad-amber-rgb), 0.9));
+  }
+}
+
 /* --------------------------------------------------------------------------
    3. Global surface, ambient light & selection
    -------------------------------------------------------------------------- */
@@ -425,6 +443,76 @@ body:has(.rem-container:focus-within) .rn-editor-container:not(:focus-within):ho
     ad-drift 22s linear infinite;
 }
 
+/* Zen Stage: while typing, peripheral chrome (sidebar, topbar, date carousel)
+   gently dims so your attention stays immersed in the paragraph */
+body:has(.rem-container:focus-within) #document-sidebar,
+body:has(.rem-container:focus-within) .rn-sidebar,
+body:has(.rem-container:focus-within) .rn-document-sidebar,
+body:has(.rem-container:focus-within) .document-sidebar__container,
+body:has(.rem-container:focus-within) .top-bar-container,
+body:has(.rem-container:focus-within) .rn-pane__top-bar,
+body:has(.rem-container:focus-within) .rn-navigation-bar,
+body:has(.rem-container:focus-within) .date-selector-carousel-container,
+body:has(.rem-container:focus-within) .rn_pane__date-selector-carousel {
+  opacity: 0.35 !important;
+  transition: opacity var(--ad-t-defocus) var(--ad-ease-defocus) !important;
+}
+
+body:has(.rem-container:focus-within) #document-sidebar:hover,
+body:has(.rem-container:focus-within) .rn-sidebar:hover,
+body:has(.rem-container:focus-within) .rn-document-sidebar:hover,
+body:has(.rem-container:focus-within) .document-sidebar__container:hover,
+body:has(.rem-container:focus-within) .top-bar-container:hover,
+body:has(.rem-container:focus-within) .rn-pane__top-bar:hover,
+body:has(.rem-container:focus-within) .rn-navigation-bar:hover,
+body:has(.rem-container:focus-within) .date-selector-carousel-container:hover,
+body:has(.rem-container:focus-within) .rn_pane__date-selector-carousel:hover {
+  opacity: 1 !important;
+  transition: opacity var(--ad-t-fast) var(--ad-ease-out) !important;
+}
+
+/* Semantic Tokens Awakening: formatting inside the active thought comes to life */
+.rem-container:focus-within b,
+.rem-container:focus-within strong,
+.rem-container:focus-within .bold {
+  color: #f7d69e !important;
+  text-shadow: 0 0 12px rgba(var(--ad-amber-rgb), 0.45);
+  transition:
+    text-shadow var(--ad-t-base) var(--ad-ease-out),
+    color var(--ad-t-base) var(--ad-ease-out);
+}
+
+.rem-container:focus-within i,
+.rem-container:focus-within em,
+.rem-container:focus-within .italic {
+  color: #b5d6a0 !important;
+  text-shadow: 0 0 10px rgba(163, 190, 140, 0.4);
+  transition:
+    text-shadow var(--ad-t-base) var(--ad-ease-out),
+    color var(--ad-t-base) var(--ad-ease-out);
+}
+
+.rem-container:focus-within .rn-rem-reference,
+.rem-container:focus-within .rem-reference {
+  background-color: rgba(var(--ad-accent-rgb), 0.14) !important;
+  border-bottom: 1.5px solid var(--ad-accent-hi) !important;
+  box-shadow: 0 0 14px rgba(var(--ad-accent-rgb), 0.28);
+}
+
+.rem-container:focus-within code,
+.rem-container:focus-within .rn-code-node,
+.rem-container:focus-within .rich-text-editor__code-node {
+  border-color: rgba(var(--ad-accent-rgb), 0.45) !important;
+  box-shadow: 0 0 10px rgba(var(--ad-accent-rgb), 0.18);
+  color: #ebaf91 !important;
+}
+
+.rem-container:focus-within .cloze {
+  background-color: rgba(var(--ad-amber-rgb), 0.18) !important;
+  border-bottom-color: #f3c27a !important;
+  box-shadow: 0 0 14px rgba(var(--ad-amber-rgb), 0.32);
+}
+
 /* --------------------------------------------------------------------------
    8. Bullet threads: they grow, and light up along the branch you are on
    -------------------------------------------------------------------------- */
@@ -479,10 +567,29 @@ body:has(.rem-container:focus-within) .rn-editor-container:not(:focus-within):ho
 
 /* The thread that follows a block lights up when that block is hovered or
    focused (adjacent-sibling trick, see section 7). It grows with a spring. */
-.rn-editor-container:hover + .TreeNode.tree-node--children::after,
+.rn-editor-container:hover + .TreeNode.tree-node--children::after {
+  transform: scaleY(1);
+  opacity: 1;
+  transition:
+    transform 640ms var(--ad-ease-out),
+    opacity var(--ad-t-fast) var(--ad-ease-out);
+}
+
+/* While focused, bioluminescent pulse flows down the child branch */
 .rn-editor-container:focus-within + .TreeNode.tree-node--children::after {
   transform: scaleY(1);
   opacity: 1;
+  background: linear-gradient(
+    to bottom,
+    var(--ad-accent) 0%,
+    var(--ad-accent-hi) 25%,
+    rgba(var(--ad-accent-rgb), 0.40) 50%,
+    var(--ad-accent-hi) 75%,
+    var(--ad-accent) 100%
+  );
+  background-size: 100% 200%;
+  animation: ad-thread-flow 3.5s linear infinite;
+  box-shadow: 0 0 14px rgba(var(--ad-accent-rgb), 0.6);
   transition:
     transform 640ms var(--ad-ease-out),
     opacity var(--ad-t-fast) var(--ad-ease-out);
@@ -564,6 +671,48 @@ body:has(.rem-container:focus-within)
 
 .rem-container:focus-within .perfect-circle {
   animation: ad-heartbeat 3.2s var(--ad-ease-inout) infinite;
+}
+
+/* Pre-attentive Branching: parent blocks with child branches have a subtle orbital halo */
+.rem-bullet--all-children-visible .rem-bullet__ring,
+.rn-rem-bullet--all-children-visible .rem-bullet__ring,
+.rn-editor-container:has(+ .TreeNode.tree-node--children:not([style*="height: 0px"])) .rem-bullet__ring {
+  fill: rgba(var(--ad-accent-rgb), 0.12) !important;
+  transition: fill var(--ad-t-slow) var(--ad-ease-defocus);
+}
+
+.rem-bullet--all-children-visible:hover .rem-bullet__ring,
+.rn-rem-bullet--all-children-visible:hover .rem-bullet__ring,
+.rn-editor-container:has(+ .TreeNode.tree-node--children:not([style*="height: 0px"])):hover .rem-bullet__ring {
+  fill: rgba(var(--ad-accent-rgb), 0.28) !important;
+}
+
+.rn-editor-container:focus-within:has(+ .TreeNode.tree-node--children:not([style*="height: 0px"])) .rem-bullet__ring {
+  fill: rgba(var(--ad-accent-rgb), 0.35) !important;
+}
+
+/* Fresh/empty block awaiting input: warm amber glow inviting you to write.
+   As soon as you type the first letter, it transitions into the teal heartbeat! */
+.rem-container:focus-within:has(.EditorContainer:empty) .rem-bullet__core,
+.rem-container:focus-within:has(.EditorContainer:has(> br:only-child)) .rem-bullet__core,
+.rem-container:focus-within:has(.EditorContainer:has(> span:empty:only-child)) .rem-bullet__core,
+.rem-container:focus-within:has(.linear-editor-item:empty) .rem-bullet__core,
+.rem-container:focus-within:has([data-linear-editor-leaf="true"]:empty) .rem-bullet__core,
+.rem-container:focus-within:has([data-is-empty="true"]) .rem-bullet__core,
+.rem-container:focus-within:has(.rn-placeholder) .rem-bullet__core {
+  fill: var(--ad-amber) !important;
+  filter: drop-shadow(0 0 8px rgba(var(--ad-amber-rgb), 0.85)) !important;
+  animation: ad-awaiting-input 2.2s var(--ad-ease-inout) infinite !important;
+}
+
+.rem-container:focus-within:has(.EditorContainer:empty) .rem-bullet__ring,
+.rem-container:focus-within:has(.EditorContainer:has(> br:only-child)) .rem-bullet__ring,
+.rem-container:focus-within:has(.EditorContainer:has(> span:empty:only-child)) .rem-bullet__ring,
+.rem-container:focus-within:has(.linear-editor-item:empty) .rem-bullet__ring,
+.rem-container:focus-within:has([data-linear-editor-leaf="true"]:empty) .rem-bullet__ring,
+.rem-container:focus-within:has([data-is-empty="true"]) .rem-bullet__ring,
+.rem-container:focus-within:has(.rn-placeholder) .rem-bullet__ring {
+  fill: rgba(var(--ad-amber-rgb), 0.24) !important;
 }
 
 /* --------------------------------------------------------------------------
