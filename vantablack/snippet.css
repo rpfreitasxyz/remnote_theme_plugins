@@ -1,0 +1,607 @@
+/* ==========================================================================
+   Vantablack Focus Theme for RemNote
+   True OLED pitch-black theme with high-visibility bullet threading,
+   luminous focus states, and gentle non-aggressive glowing anchors.
+   Author: Rafael Freitas (https://github.com/rpfreitasxyz)
+   Repository: https://github.com/rpfreitasxyz/remnote_theme_plugins
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Theme Variables & Palette
+   -------------------------------------------------------------------------- */
+:root,
+.dark,
+body.dark,
+[data-theme="dark"] {
+  /* True Vantablack / OLED Backgrounds */
+  --vb-bg-editor: #000000;
+  --vb-bg-sidebar: #050505;
+  --vb-bg-topbar: #050505;
+  --vb-bg-elevated: #0d0d0d;
+  --vb-bg-surface: #121212;
+  --vb-bg-hover: #171717;
+  --vb-bg-active: #1f1f1f;
+  --vb-bg-input: #101010;
+
+  /* Precision Borders */
+  --vb-border-subtle: #1c1c1c;
+  --vb-border-medium: #2a2a2a;
+  --vb-border-strong: #383838;
+
+  /* Bullet Threading & Hierarchy Lines (High Visibility) */
+  --vb-thread-idle: #3a3a3a;
+  --vb-thread-active: #38bdf8;
+  --vb-thread-glow: rgba(56, 189, 248, 0.45);
+
+  /* Bullets */
+  --vb-bullet-idle: #666666;
+  --vb-bullet-active: #38bdf8;
+  --vb-bullet-glow: rgba(56, 189, 248, 0.6);
+
+  /* Typography (Tuned for OLED contrast without glare) */
+  --vb-text-primary: #dedede;
+  --vb-text-bright: #ffffff;
+  --vb-text-muted: #888888;
+  --vb-text-subtle: #555555;
+
+  /* Luminous Focus & Accent */
+  --vb-accent: #38bdf8;
+  --vb-accent-hover: #7dd3fc;
+  --vb-accent-subtle: rgba(56, 189, 248, 0.08);
+  --vb-accent-glow: rgba(56, 189, 248, 0.35);
+
+  /* Gentle Anchors & Links (Clear without eye fatigue) */
+  --vb-link-text: #7dd3fc;
+  --vb-link-hover: #bae6fd;
+  --vb-link-bg: rgba(56, 189, 248, 0.07);
+  --vb-link-border: rgba(56, 189, 248, 0.38);
+  --vb-link-hover-border: #38bdf8;
+
+  /* Syntax & Functional Colors */
+  --vb-cyan: #38bdf8;
+  --vb-mint: #5eead4;
+  --vb-yellow: #fde047;
+  --vb-orange: #fb923c;
+  --vb-green: #4ade80;
+  --vb-red: #f87171;
+  --vb-purple: #c084fc;
+
+  /* RemNote Native Token Overrides */
+  --rn-clr-background-primary: var(--vb-bg-editor);
+  --rn-clr-background-secondary: var(--vb-bg-sidebar);
+  --rn-clr-background-tertiary: #000000;
+  --rn-clr-background-elevation-10: var(--vb-bg-editor);
+  --rn-clr-background-elevation-50: var(--vb-bg-elevated);
+  --rn-clr-background-elevation-100: var(--vb-bg-surface);
+  --rn-clr-border-opaque: var(--vb-border-subtle);
+  --rn-clr-content-primary: var(--vb-text-primary);
+  --rn-clr-content-secondary: var(--vb-text-muted);
+  --rn-clr-content-tertiary: var(--vb-text-subtle);
+  --rn-clr-background-accent: var(--vb-accent);
+  --rn-clr-background-light-accent: var(--vb-accent-subtle);
+
+  /* Grayscale token mapping */
+  --rn-colors-gray-0: var(--vb-bg-sidebar);
+  --rn-colors-gray-5: var(--vb-bg-editor);
+  --rn-colors-gray-10: var(--vb-bg-elevated);
+  --rn-colors-gray-20: var(--vb-border-subtle);
+  --rn-colors-gray-30: var(--vb-border-medium);
+  --rn-colors-gray-60: var(--vb-text-subtle);
+  --rn-colors-gray-80: var(--vb-text-primary);
+  --rn-colors-gray-100: var(--vb-text-bright);
+}
+
+/* --------------------------------------------------------------------------
+   2. Global App & Surfaces
+   -------------------------------------------------------------------------- */
+html,
+body,
+#root,
+.rn-layout,
+.rn-pane,
+.rn-pane__body {
+  background-color: var(--vb-bg-editor) !important;
+  color: var(--vb-text-primary) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --------------------------------------------------------------------------
+   3. Sidebars, Navigation & Headers
+   -------------------------------------------------------------------------- */
+#document-sidebar,
+.rn-sidebar,
+.rn-document-sidebar,
+.rn-navigation-bar,
+.top-bar-container,
+.rn-pane__top-bar {
+  background-color: var(--vb-bg-sidebar) !important;
+  border-color: var(--vb-border-subtle) !important;
+}
+
+#document-sidebar,
+.rn-sidebar {
+  border-right: 1px solid var(--vb-border-subtle) !important;
+}
+
+.rn-document-sidebar {
+  border-left: 1px solid var(--vb-border-subtle) !important;
+}
+
+.top-bar-container,
+.rn-pane__top-bar {
+  border-bottom: 1px solid var(--vb-border-subtle) !important;
+}
+
+.rn-sidebar-flashcards-link:hover,
+.rn-nav-tab-button:hover,
+.rn-settings__link:hover {
+  background-color: var(--vb-bg-surface) !important;
+  border-radius: 6px;
+}
+
+.rn-nav-tab-button[data-cy-active="true"],
+[data-cy-active="true"] {
+  border-bottom: 2px solid var(--vb-accent) !important;
+  color: var(--vb-text-bright) !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. Editor, Document & Headings
+   -------------------------------------------------------------------------- */
+.rn-editor-container,
+.rn-document,
+.rn-document-wrapper,
+.rem-text,
+.rn-editor__rem__body__text {
+  color: var(--vb-text-primary) !important;
+  line-height: 1.65;
+}
+
+.rn-text-heading-title,
+.rn-page-header-mobile,
+.rn-article-header {
+  color: var(--vb-text-bright) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em;
+}
+
+.rn-editor__rem__body__text--h1,
+.rn-text-heading-large {
+  color: var(--vb-text-bright) !important;
+  font-weight: 600 !important;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--vb-border-subtle);
+}
+
+.rn-editor__rem__body__text--h2,
+.rn-text-heading-medium {
+  color: #f0f0f0 !important;
+  font-weight: 600 !important;
+}
+
+.rn-editor__rem__body__text--h3,
+.rn-text-heading-small {
+  color: #e0e0e0 !important;
+  font-weight: 600 !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. Bullet Threading & Hierarchy Guides (High Visibility)
+   -------------------------------------------------------------------------- */
+/* Distinct, crisp vertical threading guide lines through pitch-black */
+.TreeNode,
+#hierarchy-editor.TreeNode,
+.tree-node--children,
+.flattened-children,
+.flattened-children-node {
+  border-left-color: var(--vb-thread-idle) !important;
+  border-left-width: 2px !important;
+  border-left-style: solid !important;
+  opacity: 1 !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Active thread lighting on hover or active branch */
+.TreeNode:hover,
+.TreeNode:focus-within,
+.tree-node--children:hover,
+.tree-node--children:focus-within {
+  border-left-color: var(--vb-thread-active) !important;
+  box-shadow: -1px 0 8px var(--vb-thread-glow) !important;
+}
+
+/* Bullet Points - clean circular dots without square background boxes */
+.rn-bullet-container,
+.rem-bullet__container {
+  opacity: 1 !important;
+}
+
+.rn-rem-bullet,
+.rem-bullet,
+.perfect-circle,
+.perfect-circle__inner {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.rem-bullet__core {
+  fill: var(--vb-bullet-idle) !important;
+  transition: fill 0.2s ease, filter 0.2s ease, transform 0.2s ease;
+}
+
+.rem-bullet__ring {
+  fill: transparent !important;
+}
+
+/* Bullet highlight on hover or focused rem branch */
+.rn-bullet-container:hover .rem-bullet__core,
+.rem-container:focus-within > .tree-node--parent .rem-bullet__core {
+  fill: var(--vb-bullet-active) !important;
+  filter: drop-shadow(0 0 6px var(--vb-bullet-glow)) !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. High-Visibility Focus States (Quando algo está em foco)
+   -------------------------------------------------------------------------- */
+/* Focused Rem item highlight */
+.rem-container:focus-within,
+.rn-editor__rem:focus-within {
+  background: linear-gradient(
+    90deg,
+    rgba(56, 189, 248, 0.08) 0%,
+    rgba(56, 189, 248, 0.01) 90%
+  ) !important;
+  border-left: 2px solid var(--vb-accent) !important;
+  padding-left: 6px !important;
+  border-radius: 4px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+/* Inputs, textareas, search boxes focus */
+input[type="text"]:focus,
+input[type="search"]:focus,
+textarea:focus,
+.rn-search:focus {
+  border-color: var(--vb-accent) !important;
+  box-shadow: 0 0 0 1px var(--vb-accent), 0 0 12px var(--vb-accent-glow) !important;
+}
+
+/* Active command / selection in omnibar */
+#search-results__result[data-cmdopt-selected="true"] {
+  background-color: var(--vb-accent) !important;
+  color: #000000 !important;
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   7. Links, Anchors & Rem References (Evidente, sem agressividade)
+   -------------------------------------------------------------------------- */
+/* Rem References ([[rem]]) as gentle glowing underline pills */
+.rn-rem-reference,
+.rem-reference {
+  background-color: var(--vb-link-bg) !important;
+  border-bottom: 1.5px solid var(--vb-link-border) !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  color: var(--vb-link-text) !important;
+  border-radius: 3px !important;
+  padding: 0 5px !important;
+  text-decoration: none !important;
+  font-weight: 500 !important;
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+    color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rn-rem-reference:hover,
+.rem-reference:hover {
+  background-color: rgba(56, 189, 248, 0.16) !important;
+  border-bottom-color: var(--vb-link-hover-border) !important;
+  color: var(--vb-link-hover) !important;
+  box-shadow: 0 2px 8px rgba(56, 189, 248, 0.25) !important;
+}
+
+/* Reference icons (calendar, document icons inside links) */
+.icon-in-reference {
+  color: var(--vb-link-text) !important;
+  opacity: 0.85;
+}
+
+/* Standard Hyperlinks */
+a,
+.text-blue-60,
+.text-blue-80 {
+  color: var(--vb-link-text) !important;
+  text-decoration: none !important;
+  border-bottom: 1.5px solid var(--vb-link-border) !important;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+a:hover {
+  color: var(--vb-link-hover) !important;
+  border-bottom-color: var(--vb-accent) !important;
+}
+
+/* Tags (#tag) */
+.rn-work-in-progress-tag {
+  background-color: rgba(94, 234, 212, 0.08) !important;
+  border: 1px solid rgba(94, 234, 212, 0.25) !important;
+  color: var(--vb-mint) !important;
+  border-radius: 4px !important;
+  padding: 1px 6px !important;
+  font-size: 0.88em !important;
+}
+
+/* --------------------------------------------------------------------------
+   8. Inline Elements, Code & Blockquotes
+   -------------------------------------------------------------------------- */
+b,
+strong,
+.bold {
+  color: var(--vb-text-bright) !important;
+  font-weight: 600 !important;
+}
+
+i,
+em,
+.italic {
+  color: var(--vb-mint) !important;
+  font-style: italic;
+}
+
+u,
+.underline {
+  text-decoration-color: var(--vb-accent) !important;
+}
+
+/* Inline Code */
+code,
+.rn-code-node,
+.rich-text-editor__code-node {
+  background-color: #0d0d0d !important;
+  color: var(--vb-orange) !important;
+  border: 1px solid var(--vb-border-subtle) !important;
+  border-radius: 4px !important;
+  padding: 0.15em 0.38em !important;
+  font-family: "Cascadia Code", "Fira Code", Consolas, monospace !important;
+  font-size: 0.9em !important;
+}
+
+/* Code Blocks */
+pre,
+.rn-code-node pre {
+  background-color: #080808 !important;
+  border: 1px solid var(--vb-border-subtle) !important;
+  border-radius: 6px !important;
+  padding: 12px 14px !important;
+}
+
+/* Blockquotes */
+.rn-quote,
+.rn-quote-inner,
+.rn-quote-content {
+  border-left: 3px solid var(--vb-accent) !important;
+  background-color: rgba(56, 189, 248, 0.04) !important;
+  color: var(--vb-text-muted) !important;
+  font-style: italic;
+  padding: 6px 14px !important;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Dividers */
+.rn-divider,
+.rn-editor-divider {
+  background-color: var(--vb-border-subtle) !important;
+  height: 1px !important;
+  border: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   9. Clozes & Flashcards Experience
+   -------------------------------------------------------------------------- */
+.cloze {
+  background-color: rgba(56, 189, 248, 0.12) !important;
+  border-bottom: 2px solid var(--vb-accent) !important;
+  color: var(--vb-link-hover) !important;
+  border-radius: 3px !important;
+  padding: 0 4px !important;
+  transition: background-color 0.15s ease;
+}
+
+.cloze:hover {
+  background-color: rgba(56, 189, 248, 0.22) !important;
+}
+
+.rn-queue,
+.rn-queue-container,
+.rn-flashcards-page-container {
+  background-color: var(--vb-bg-editor) !important;
+}
+
+.rn-queue-rem,
+.rn-question-rem {
+  background-color: var(--vb-bg-elevated) !important;
+  border: 1px solid var(--vb-border-subtle) !important;
+  border-radius: 8px !important;
+  padding: 18px 22px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8) !important;
+}
+
+.rn-flashcard-delimiter,
+.rn-card-delimiter {
+  color: var(--vb-accent) !important;
+  font-weight: 700 !important;
+}
+
+/* --------------------------------------------------------------------------
+   10. Highlights (Eye-Friendly Luminous Tones)
+   -------------------------------------------------------------------------- */
+.highlight-color--red,
+.rn-editor__rem__body--red {
+  background-color: rgba(248, 113, 113, 0.18) !important;
+  border-left: 3px solid var(--vb-red) !important;
+  border-radius: 3px;
+  color: var(--vb-text-bright) !important;
+}
+
+.highlight-color--orange,
+.rn-editor__rem__body--orange {
+  background-color: rgba(251, 146, 60, 0.18) !important;
+  border-left: 3px solid var(--vb-orange) !important;
+  border-radius: 3px;
+  color: var(--vb-text-bright) !important;
+}
+
+.highlight-color--yellow,
+.rn-editor__rem__body--yellow {
+  background-color: rgba(253, 224, 71, 0.18) !important;
+  border-left: 3px solid var(--vb-yellow) !important;
+  border-radius: 3px;
+  color: var(--vb-text-bright) !important;
+}
+
+.highlight-color--green,
+.rn-editor__rem__body--green {
+  background-color: rgba(74, 222, 128, 0.18) !important;
+  border-left: 3px solid var(--vb-green) !important;
+  border-radius: 3px;
+  color: var(--vb-text-bright) !important;
+}
+
+.highlight-color--blue,
+.rn-editor__rem__body--blue {
+  background-color: rgba(56, 189, 248, 0.18) !important;
+  border-left: 3px solid var(--vb-cyan) !important;
+  border-radius: 3px;
+  color: var(--vb-text-bright) !important;
+}
+
+.highlight-color--purple,
+.rn-editor__rem__body--purple {
+  background-color: rgba(192, 132, 252, 0.18) !important;
+  border-left: 3px solid var(--vb-purple) !important;
+  border-radius: 3px;
+  color: var(--vb-text-bright) !important;
+}
+
+/* --------------------------------------------------------------------------
+   11. Popups, Omnibar & Menus
+   -------------------------------------------------------------------------- */
+.rn-popup,
+.rn-popup-background,
+.rn-dialog,
+.rn-dialog-background,
+.rn-clr-shadow-menu,
+.rn-sort-popup,
+.rn-floating-toolbar-wrapper,
+.rn-floating-toolbar {
+  background-color: var(--vb-bg-elevated) !important;
+  border: 1px solid var(--vb-border-medium) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9) !important;
+}
+
+#search-results__list {
+  background-color: var(--vb-bg-elevated) !important;
+}
+
+#search-results__result {
+  color: var(--vb-text-primary) !important;
+  border-radius: 4px;
+}
+
+#search-results__result:hover {
+  background-color: var(--vb-bg-hover) !important;
+}
+
+/* --------------------------------------------------------------------------
+   12. Buttons, Inputs & Controls
+   -------------------------------------------------------------------------- */
+.rn-button {
+  background-color: var(--vb-bg-input) !important;
+  color: var(--vb-text-primary) !important;
+  border: 1px solid var(--vb-border-medium) !important;
+  border-radius: 4px !important;
+}
+
+.rn-button:hover {
+  background-color: var(--vb-bg-surface) !important;
+  color: var(--vb-text-bright) !important;
+  border-color: var(--vb-border-strong) !important;
+}
+
+.rn-button--primary,
+.rn-button.rn-button--primary {
+  background-color: var(--vb-accent) !important;
+  color: #000000 !important;
+  font-weight: 600 !important;
+  border: 1px solid var(--vb-accent) !important;
+}
+
+.rn-button--primary:hover,
+.rn-button.rn-button--primary:hover {
+  background-color: var(--vb-accent-hover) !important;
+  border-color: var(--vb-accent-hover) !important;
+  box-shadow: 0 0 12px var(--vb-accent-glow);
+}
+
+input[type="text"],
+input[type="search"],
+textarea,
+.rn-search {
+  background-color: var(--vb-bg-input) !important;
+  border: 1px solid var(--vb-border-medium) !important;
+  color: var(--vb-text-primary) !important;
+  border-radius: 4px !important;
+  padding: 5px 9px !important;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.rn-checkbox--checked {
+  background-color: var(--vb-accent) !important;
+  border-color: var(--vb-accent) !important;
+  color: #000000 !important;
+  border-radius: 3px !important;
+}
+
+.rn-checkbox--unchecked {
+  background-color: var(--vb-bg-input) !important;
+  border-color: var(--vb-border-medium) !important;
+  border-radius: 3px !important;
+}
+
+.rn-switch {
+  background-color: var(--vb-bg-input) !important;
+  border: 1px solid var(--vb-border-medium) !important;
+  border-radius: 12px !important;
+}
+
+.rn-switch[data-state="checked"] {
+  background-color: var(--vb-accent) !important;
+  border-color: var(--vb-accent) !important;
+}
+
+/* --------------------------------------------------------------------------
+   13. Scrollbars
+   -------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #242424;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #383838;
+}

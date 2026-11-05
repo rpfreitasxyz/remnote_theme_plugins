@@ -1,0 +1,17 @@
+{
+  "manifestVersion": 1,
+  "id": "vantablack-focus",
+  "name": "Vantablack Focus",
+  "author": "Rafael Freitas",
+  "repoUrl": "https://github.com/rpfreitasxyz/remnote_theme_plugins",
+  "enableOnMobile": true,
+  "version": {
+    "major": 0,
+    "minor": 1,
+    "patch": 0
+  },
+  "theme": ["dark"],
+  "description": "True Vantablack OLED dark theme for RemNote with luminous bullet threading, gentle glowing anchors, and high-visibility focus states.",
+  "requestNative": false,
+  "requiredScopes": []
+}
