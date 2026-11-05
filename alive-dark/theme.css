@@ -599,11 +599,126 @@ body:has(.rem-container:focus-within) .rn_pane__date-selector-carousel:hover {
   background: rgba(var(--ad-accent-rgb), 0.18);
 }
 
-/* Threads follow the dimming of focus mode */
+/* Non-active ancestor threads follow the dimming of focus mode (visible structure) */
 body:has(.rem-container:focus-within)
   .rn-editor-container:not(:focus-within) + .TreeNode.tree-node--children {
-  opacity: 0.45 !important;
+  opacity: 0.65 !important;
 }
+
+/* --------------------------------------------------------------------------
+   7b. CONTEXT PRESERVATION: lineage illumination (parents, sisters & threads)
+   --------------------------------------------------------------------------
+   While typing in a child or parent block, the immediate hierarchy must not
+   get lost in the dark. The parent container, sister blocks under the same
+   branch, and the ancestor bullet thread stay illuminated and clearly legible.
+   -------------------------------------------------------------------------- */
+
+/* 1. Parent bullet thread of active branch: stays 100% visible and pulses */
+.TreeNode.tree-node--children:has(+ .rn-editor-container:focus-within),
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) {
+  opacity: 1 !important;
+}
+
+.TreeNode.tree-node--children:has(+ .rn-editor-container:focus-within)::after,
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container:focus-within)::after,
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within)::after,
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within)::after,
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within)::after,
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within)::after,
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within)::after,
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within)::after {
+  transform: scaleY(1) !important;
+  opacity: 1 !important;
+  background: linear-gradient(
+    to bottom,
+    var(--ad-accent) 0%,
+    var(--ad-accent-hi) 25%,
+    rgba(var(--ad-accent-rgb), 0.40) 50%,
+    var(--ad-accent-hi) 78%,
+    var(--ad-accent) 100%
+  ) !important;
+  background-size: 100% 200% !important;
+  animation: ad-thread-flow 3.5s linear infinite !important;
+  box-shadow: 0 0 14px rgba(var(--ad-accent-rgb), 0.6) !important;
+}
+
+.TreeNode.tree-node--children:has(+ .rn-editor-container:focus-within)::before,
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container:focus-within)::before,
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within)::before,
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within)::before,
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within)::before,
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within)::before,
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within)::before,
+.TreeNode.tree-node--children:has(+ .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within)::before {
+  background: rgba(var(--ad-accent-rgb), 0.28) !important;
+}
+
+/* 2. Parent container: stays clearly legible (0.88 opacity) with illuminated ring */
+.rn-editor-container:has(+ .TreeNode.tree-node--children + .rn-editor-container:focus-within),
+.rn-editor-container:has(+ .TreeNode.tree-node--children + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
+.rn-editor-container:has(+ .TreeNode.tree-node--children + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
+.rn-editor-container:has(+ .TreeNode.tree-node--children + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
+.rn-editor-container:has(+ .TreeNode.tree-node--children + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
+.rn-editor-container:has(+ .TreeNode.tree-node--children + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
+.rn-editor-container:has(+ .TreeNode.tree-node--children + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
+.rn-editor-container:has(+ .TreeNode.tree-node--children + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) {
+  opacity: 0.88 !important;
+}
+
+.rn-editor-container:has(+ .TreeNode.tree-node--children + .rn-editor-container:focus-within) .rem-bullet__ring,
+.rn-editor-container:has(+ .TreeNode.tree-node--children + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
+.rn-editor-container:has(+ .TreeNode.tree-node--children + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
+.rn-editor-container:has(+ .TreeNode.tree-node--children + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
+.rn-editor-container:has(+ .TreeNode.tree-node--children + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
+.rn-editor-container:has(+ .TreeNode.tree-node--children + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
+.rn-editor-container:has(+ .TreeNode.tree-node--children + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
+.rn-editor-container:has(+ .TreeNode.tree-node--children + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring {
+  fill: rgba(var(--ad-accent-rgb), 0.35) !important;
+  filter: drop-shadow(0 0 5px rgba(var(--ad-accent-rgb), 0.5)) !important;
+}
+
+/* 3. Sister blocks (siblings sharing the active branch): remain contextually readable (0.80 opacity) */
+.rn-editor-container:has(+ .TreeNode + .rn-editor-container:focus-within),
+.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
+.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
+.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
+.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
+.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
+.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
+.rn-editor-container:focus-within + .TreeNode + .rn-editor-container,
+.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container,
+.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container,
+.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container,
+.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container,
+.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container,
+.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container {
+  opacity: 0.80 !important;
+}
+
+/* Sister blocks bullet ring: subtle guidance */
+.rn-editor-container:has(+ .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
+.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
+.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
+.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
+.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
+.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
+.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
+.rn-editor-container:focus-within + .TreeNode + .rn-editor-container .rem-bullet__ring,
+.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container .rem-bullet__ring,
+.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container .rem-bullet__ring,
+.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container .rem-bullet__ring,
+.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container .rem-bullet__ring,
+.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container .rem-bullet__ring,
+.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container .rem-bullet__ring {
+  fill: rgba(var(--ad-accent-rgb), 0.16) !important;
+}
+
 
 /* --------------------------------------------------------------------------
    9. Bullets: spring on hover, squish on click, heartbeat on focus

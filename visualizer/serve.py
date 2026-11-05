@@ -126,7 +126,12 @@ TOOLBAR = """<script>
   document.body.appendChild(host);
   // ?focus=N foca o N-ésimo bloco do editor (para testar estados :focus-within)
   const f = new URLSearchParams(location.search).get('focus');
-  if (f !== null) setTimeout(() => document.querySelectorAll('.EditorContainer')[+f]?.focus(), 300);
+  if (f !== null) {
+    const focusBlock = () => document.querySelectorAll('.EditorContainer')[+f]?.focus();
+    focusBlock();
+    setTimeout(focusBlock, 60);
+    setTimeout(focusBlock, 250);
+  }
   poll();
   setInterval(poll, 1000);
 })();
