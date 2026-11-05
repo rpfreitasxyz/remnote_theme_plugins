@@ -71,3 +71,4 @@ Para saber mais sobre as classes, seletores e diretrizes de desenvolvimento de t
 
 Este projeto é distribuído sob a licença MIT.
 Veja o arquivo [LICENSE](./LICENSE) para mais detalhes.
+

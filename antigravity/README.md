@@ -59,3 +59,4 @@ Para aplicar diretamente via CSS personalizado sem empacotar:
 
 Este tema está disponível sob a licença MIT.
 Consulte o arquivo `LICENSE` na raiz do repositório para mais detalhes.
+
