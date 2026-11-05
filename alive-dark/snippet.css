@@ -47,6 +47,10 @@ body.dark,
 
   /* Accents */
   --ad-accent: #7ec4b6;          /* eucalyptus teal, ~525nm */
+  --ad-anchor-blue: #38bdf8;          /* vivid electric cyan / sky blue */
+  --ad-anchor-blue-rgb: 56, 189, 248;
+  --ad-anchor-text: #7dd3fc;
+  --ad-anchor-text-hi: #e0f2fe;
   --ad-accent-hi: #a3dccf;
   --ad-accent-rgb: 126, 196, 182;
   --ad-amber: #e2b475;           /* memory / emphasis */
@@ -494,9 +498,10 @@ body:has(.rem-container:focus-within) .rn_pane__date-selector-carousel:hover {
 
 .rem-container:focus-within .rn-rem-reference,
 .rem-container:focus-within .rem-reference {
-  background-color: rgba(var(--ad-accent-rgb), 0.14) !important;
-  border-bottom: 1.5px solid var(--ad-accent-hi) !important;
-  box-shadow: 0 0 14px rgba(var(--ad-accent-rgb), 0.28);
+  background-color: rgba(var(--ad-anchor-blue-rgb), 0.24) !important;
+  border-bottom: 2px solid var(--ad-anchor-blue) !important;
+  color: #bae6fd !important;
+  box-shadow: 0 0 16px rgba(var(--ad-anchor-blue-rgb), 0.45) !important;
 }
 
 .rem-container:focus-within code,
@@ -683,43 +688,6 @@ body:has(.rem-container:focus-within)
   filter: drop-shadow(0 0 5px rgba(var(--ad-accent-rgb), 0.5)) !important;
 }
 
-/* 3. Sister blocks (siblings sharing the active branch): remain contextually readable (0.80 opacity) */
-.rn-editor-container:has(+ .TreeNode + .rn-editor-container:focus-within),
-.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
-.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
-.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
-.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
-.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
-.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within),
-.rn-editor-container:focus-within + .TreeNode + .rn-editor-container,
-.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container,
-.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container,
-.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container,
-.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container,
-.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container,
-.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container {
-  opacity: 0.80 !important;
-}
-
-/* Sister blocks bullet ring: subtle guidance */
-.rn-editor-container:has(+ .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
-.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
-.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
-.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
-.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
-.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
-.rn-editor-container:has(+ .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container:focus-within) .rem-bullet__ring,
-.rn-editor-container:focus-within + .TreeNode + .rn-editor-container .rem-bullet__ring,
-.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container .rem-bullet__ring,
-.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container .rem-bullet__ring,
-.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container .rem-bullet__ring,
-.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container .rem-bullet__ring,
-.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container .rem-bullet__ring,
-.rn-editor-container:focus-within + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container + .TreeNode + .rn-editor-container .rem-bullet__ring {
-  fill: rgba(var(--ad-accent-rgb), 0.16) !important;
-}
-
-
 /* --------------------------------------------------------------------------
    9. Bullets: spring on hover, squish on click, heartbeat on focus
    -------------------------------------------------------------------------- */
@@ -835,57 +803,60 @@ body:has(.rem-container:focus-within)
    -------------------------------------------------------------------------- */
 .rn-rem-reference,
 .rem-reference {
-  background-color: rgba(var(--ad-accent-rgb), 0.07) !important;
-  background-image: linear-gradient(var(--ad-accent-hi), var(--ad-accent-hi)) !important;
+  background-color: rgba(var(--ad-anchor-blue-rgb), 0.15) !important;
+  background-image: linear-gradient(var(--ad-anchor-blue), var(--ad-anchor-blue)) !important;
   background-repeat: no-repeat !important;
   background-position: 0 100% !important;
-  background-size: 0% 1.5px !important;
+  background-size: 0% 2px !important;
   border: 0 !important;
-  border-bottom: 1.5px solid rgba(var(--ad-accent-rgb), 0.32) !important;
-  border-radius: 3px !important;
-  color: #8fcdbf !important;
-  padding: 0 5px !important;
+  border-bottom: 2px solid rgba(var(--ad-anchor-blue-rgb), 0.45) !important;
+  border-radius: 4px !important;
+  color: var(--ad-anchor-text) !important;
+  padding: 1px 6px !important;
   font-weight: 500 !important;
   text-decoration: none !important;
+  box-shadow: 0 0 10px rgba(var(--ad-anchor-blue-rgb), 0.16);
   transition:
-    background-size 520ms var(--ad-ease-out),
+    background-size 420ms var(--ad-ease-out),
     background-color var(--ad-t-base) var(--ad-ease-out),
     color var(--ad-t-base) var(--ad-ease-out),
-    box-shadow var(--ad-t-slow) var(--ad-ease-defocus);
+    box-shadow var(--ad-t-base) var(--ad-ease-out);
 }
 
 .rn-rem-reference:hover,
 .rem-reference:hover {
-  background-size: 100% 1.5px !important;
-  background-color: rgba(var(--ad-accent-rgb), 0.16) !important;
-  color: var(--ad-accent-hi) !important;
-  box-shadow: 0 2px 14px rgba(var(--ad-accent-rgb), 0.22);
-  transition-duration: 520ms, var(--ad-t-fast), var(--ad-t-fast), var(--ad-t-fast);
+  background-size: 100% 2px !important;
+  background-color: rgba(var(--ad-anchor-blue-rgb), 0.28) !important;
+  color: var(--ad-anchor-text-hi) !important;
+  border-bottom-color: var(--ad-anchor-blue) !important;
+  box-shadow: 0 2px 16px rgba(var(--ad-anchor-blue-rgb), 0.45);
+  transition-duration: 420ms, var(--ad-t-fast), var(--ad-t-fast), var(--ad-t-fast);
 }
 
 .icon-in-reference {
-  color: var(--ad-accent) !important;
-  opacity: 0.85;
+  color: var(--ad-anchor-blue) !important;
+  opacity: 0.95;
 }
 
 a,
 .text-blue-60,
 .text-blue-80 {
-  color: #8fcdbf !important;
+  color: var(--ad-anchor-text) !important;
   text-decoration: none !important;
-  background-image: linear-gradient(var(--ad-accent-hi), var(--ad-accent-hi));
+  background-image: linear-gradient(var(--ad-anchor-blue), var(--ad-anchor-blue));
   background-repeat: no-repeat;
   background-position: 0 100%;
   background-size: 0% 1.5px;
-  border-bottom: 1.5px solid rgba(var(--ad-accent-rgb), 0.32) !important;
+  border-bottom: 1.5px solid rgba(var(--ad-anchor-blue-rgb), 0.45) !important;
   transition:
-    background-size 520ms var(--ad-ease-out),
+    background-size 420ms var(--ad-ease-out),
     color var(--ad-t-base) var(--ad-ease-out);
 }
 
 a:hover {
-  color: var(--ad-accent-hi) !important;
+  color: var(--ad-anchor-text-hi) !important;
   background-size: 100% 1.5px;
+  border-bottom-color: var(--ad-anchor-blue) !important;
 }
 
 .rn-work-in-progress-tag {
