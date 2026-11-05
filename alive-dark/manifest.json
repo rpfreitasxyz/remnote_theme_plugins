@@ -7,10 +7,12 @@
   "enableOnMobile": true,
   "version": {
     "major": 1,
-    "minor": 0,
-    "patch": 0
+    "minor": 1,
+    "patch": 1
   },
-  "theme": ["dark"],
+  "theme": [
+    "dark"
+  ],
   "description": "A kinetic, bioluminescent dark theme combining visual ergonomics with physics-based cubic-bezier motion, optical depth-of-field focus dimming, living bullet threads, and tactile micro-interactions.",
   "requestNative": false,
   "requiredScopes": []
