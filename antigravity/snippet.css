@@ -1,0 +1,554 @@
+/* ==========================================================================
+   Antigravity Dark Theme for RemNote
+   Inspired by the sleek, focused design of Google Antigravity IDE.
+   Author: Rafael Freitas (https://github.com/rpfreitasxyz)
+   Repository: https://github.com/rpfreitasxyz/remnote_theme_plugins
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Theme Variables & Palette
+   -------------------------------------------------------------------------- */
+:root,
+.dark,
+body.dark,
+[data-theme="dark"] {
+  /* Surfaces & Backgrounds */
+  --ag-bg-editor: #1f1f1f;
+  --ag-bg-sidebar: #181818;
+  --ag-bg-topbar: #181818;
+  --ag-bg-elevated: #222222;
+  --ag-bg-surface: #262626;
+  --ag-bg-hover: #2a2d2e;
+  --ag-bg-active: #37373d;
+  --ag-bg-input: #313131;
+
+  /* Borders & Dividers */
+  --ag-border-subtle: #2b2b2b;
+  --ag-border-medium: #3c3c3c;
+  --ag-border-focus: #0078d4;
+
+  /* Typography */
+  --ag-text-primary: #cccccc;
+  --ag-text-bright: #ffffff;
+  --ag-text-muted: #9d9d9d;
+  --ag-text-subtle: #868686;
+
+  /* Antigravity Accent Colors */
+  --ag-accent: #0078d4;
+  --ag-accent-hover: #026ec1;
+  --ag-accent-subtle: rgba(0, 120, 212, 0.18);
+  --ag-accent-glow: rgba(0, 120, 212, 0.35);
+
+  /* Functional & Syntax Tones */
+  --ag-cyan: #4ec9b0;
+  --ag-blue: #9cdcfe;
+  --ag-link: #4daafc;
+  --ag-link-hover: #85b6ff;
+  --ag-yellow: #dcdcaa;
+  --ag-orange: #ce9178;
+  --ag-green: #2ea043;
+  --ag-red: #f85149;
+  --ag-purple: #c586c0;
+
+  /* RemNote Native Design Token Overrides */
+  --rn-clr-background-primary: var(--ag-bg-editor);
+  --rn-clr-background-secondary: var(--ag-bg-sidebar);
+  --rn-clr-background-tertiary: #141414;
+  --rn-clr-background-elevation-10: var(--ag-bg-editor);
+  --rn-clr-background-elevation-50: var(--ag-bg-elevated);
+  --rn-clr-background-elevation-100: var(--ag-bg-surface);
+  --rn-clr-border-opaque: var(--ag-border-subtle);
+  --rn-clr-content-primary: var(--ag-text-primary);
+  --rn-clr-content-secondary: var(--ag-text-muted);
+  --rn-clr-content-tertiary: var(--ag-text-subtle);
+  --rn-clr-background-accent: var(--ag-accent);
+  --rn-clr-background-light-accent: var(--ag-accent-subtle);
+
+  /* RemNote Gray Scale Mapping */
+  --rn-colors-gray-0: var(--ag-bg-sidebar);
+  --rn-colors-gray-5: var(--ag-bg-editor);
+  --rn-colors-gray-10: var(--ag-bg-elevated);
+  --rn-colors-gray-20: var(--ag-border-subtle);
+  --rn-colors-gray-30: var(--ag-border-medium);
+  --rn-colors-gray-60: var(--ag-text-subtle);
+  --rn-colors-gray-80: var(--ag-text-primary);
+  --rn-colors-gray-100: var(--ag-text-bright);
+}
+
+/* --------------------------------------------------------------------------
+   2. Global Layout & Typography
+   -------------------------------------------------------------------------- */
+html,
+body,
+#root,
+.rn-layout,
+.rn-pane,
+.rn-pane__body {
+  background-color: var(--ag-bg-editor) !important;
+  color: var(--ag-text-primary) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --------------------------------------------------------------------------
+   3. Sidebars, Navigation & Headers
+   -------------------------------------------------------------------------- */
+#document-sidebar,
+.rn-sidebar,
+.rn-document-sidebar,
+.rn-navigation-bar,
+.top-bar-container,
+.rn-pane__top-bar {
+  background-color: var(--ag-bg-sidebar) !important;
+  border-color: var(--ag-border-subtle) !important;
+}
+
+#document-sidebar,
+.rn-sidebar {
+  border-right: 1px solid var(--ag-border-subtle) !important;
+}
+
+.rn-document-sidebar {
+  border-left: 1px solid var(--ag-border-subtle) !important;
+}
+
+.top-bar-container,
+.rn-pane__top-bar {
+  border-bottom: 1px solid var(--ag-border-subtle) !important;
+}
+
+/* Sidebar navigation item states */
+.rn-sidebar-flashcards-link:hover,
+.rn-nav-tab-button:hover,
+.rn-settings__link:hover {
+  background-color: var(--ag-bg-surface) !important;
+  border-radius: 4px;
+}
+
+.rn-nav-tab-button[data-cy-active="true"],
+[data-cy-active="true"] {
+  border-bottom: 2px solid var(--ag-accent) !important;
+  color: var(--ag-text-bright) !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. Editor & Document Surface
+   -------------------------------------------------------------------------- */
+.rn-editor-container,
+.rn-document,
+.rn-document-wrapper,
+.rem-text,
+.rn-editor__rem__body__text {
+  color: var(--ag-text-primary) !important;
+  line-height: 1.62;
+}
+
+/* Document title */
+.rn-text-heading-title,
+.rn-page-header-mobile,
+.rn-article-header {
+  color: var(--ag-text-bright) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em;
+}
+
+/* Headings (H1, H2, H3) */
+.rn-editor__rem__body__text--h1,
+.rn-text-heading-large {
+  color: var(--ag-text-bright) !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.015em;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--ag-border-subtle);
+}
+
+.rn-editor__rem__body__text--h2,
+.rn-text-heading-medium {
+  color: #e6e6e6 !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em;
+}
+
+.rn-editor__rem__body__text--h3,
+.rn-text-heading-small {
+  color: #d4d4d4 !important;
+  font-weight: 600 !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. Bullets, Trees & Hierarchy Lines
+   -------------------------------------------------------------------------- */
+.rn-bullet-container,
+.rn-rem-icon-bullet {
+  color: var(--ag-text-subtle) !important;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.rn-bullet-container:hover,
+.rn-rem-icon-bullet:hover {
+  color: var(--ag-accent) !important;
+  transform: scale(1.15);
+}
+
+/* Vertical indentation tree lines */
+.TreeNode,
+#hierarchy-editor.TreeNode,
+.rn-fast-rem-container {
+  border-color: var(--ag-border-subtle) !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. Inline Formatting, Code & Quotes
+   -------------------------------------------------------------------------- */
+b,
+strong,
+.bold {
+  color: var(--ag-text-bright) !important;
+  font-weight: 600 !important;
+}
+
+i,
+em,
+.italic {
+  color: var(--ag-blue) !important;
+  font-style: italic;
+}
+
+u,
+.underline {
+  text-decoration-color: var(--ag-accent) !important;
+}
+
+/* Inline Code */
+code,
+.rn-code-node,
+.rich-text-editor__code-node {
+  background-color: var(--ag-bg-sidebar) !important;
+  color: var(--ag-orange) !important;
+  border: 1px solid var(--ag-border-subtle) !important;
+  border-radius: 4px !important;
+  padding: 0.15em 0.38em !important;
+  font-family: "Cascadia Code", "Fira Code", Consolas, "Courier New", monospace !important;
+  font-size: 0.9em !important;
+}
+
+/* Code Blocks */
+pre,
+.rn-code-node pre {
+  background-color: var(--ag-bg-sidebar) !important;
+  border: 1px solid var(--ag-border-subtle) !important;
+  border-radius: 6px !important;
+  padding: 12px 14px !important;
+}
+
+/* Blockquotes */
+.rn-quote,
+.rn-quote-inner,
+.rn-quote-content {
+  border-left: 3px solid var(--ag-accent) !important;
+  background-color: rgba(0, 120, 212, 0.05) !important;
+  color: var(--ag-text-muted) !important;
+  font-style: italic;
+  padding: 6px 12px !important;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Dividers */
+.rn-divider,
+.rn-editor-divider {
+  background-color: var(--ag-border-subtle) !important;
+  height: 1px !important;
+  border: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   7. Rem References, Links & Tags
+   -------------------------------------------------------------------------- */
+/* Rem References ([[rem]]) */
+.rn-rem-reference {
+  color: var(--ag-link) !important;
+  text-decoration: none !important;
+  border-bottom: 1px dashed rgba(0, 120, 212, 0.45) !important;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.rn-rem-reference:hover {
+  color: var(--ag-link-hover) !important;
+  border-bottom: 1px solid var(--ag-link-hover) !important;
+}
+
+/* Standard Hyperlinks */
+a,
+.text-blue-60,
+.text-blue-80 {
+  color: var(--ag-link) !important;
+  text-decoration: none !important;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: var(--ag-link-hover) !important;
+  text-decoration: underline !important;
+}
+
+/* Tags (#tag) */
+.rn-work-in-progress-tag,
+[data-rem-tags] {
+  background-color: var(--ag-accent-subtle) !important;
+  border: 1px solid rgba(0, 120, 212, 0.3) !important;
+  color: var(--ag-link-hover) !important;
+  border-radius: 4px !important;
+  padding: 1px 6px !important;
+  font-size: 0.88em !important;
+}
+
+/* --------------------------------------------------------------------------
+   8. Clozes & Flashcards Experience
+   -------------------------------------------------------------------------- */
+/* Cloze Deletions ({{cloze}}) */
+.cloze {
+  background-color: var(--ag-accent-subtle) !important;
+  border-bottom: 2px solid var(--ag-accent) !important;
+  color: var(--ag-link-hover) !important;
+  border-radius: 3px !important;
+  padding: 0 3px !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.cloze:hover {
+  background-color: rgba(0, 120, 212, 0.3) !important;
+  border-bottom-color: var(--ag-accent-hover) !important;
+}
+
+/* Flashcard Queue Study Screen */
+.rn-queue,
+.rn-queue-container,
+.rn-flashcards-page-container {
+  background-color: var(--ag-bg-editor) !important;
+}
+
+.rn-queue-rem,
+.rn-question-rem {
+  background-color: var(--ag-bg-elevated) !important;
+  border: 1px solid var(--ag-border-subtle) !important;
+  border-radius: 8px !important;
+  padding: 16px 20px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Flashcard Delimiters (->, <-, <->, ::) */
+.rn-flashcard-delimiter,
+.rn-card-delimiter {
+  color: var(--ag-accent) !important;
+  font-weight: 700 !important;
+}
+
+/* --------------------------------------------------------------------------
+   9. Highlights (Theme-Harmonized Dark Tones)
+   -------------------------------------------------------------------------- */
+.highlight-color--red,
+.rn-editor__rem__body--red {
+  background-color: rgba(248, 81, 73, 0.22) !important;
+  border-left: 3px solid var(--ag-red) !important;
+  border-radius: 3px;
+  color: var(--ag-text-bright) !important;
+}
+
+.highlight-color--orange,
+.rn-editor__rem__body--orange {
+  background-color: rgba(206, 145, 120, 0.22) !important;
+  border-left: 3px solid var(--ag-orange) !important;
+  border-radius: 3px;
+  color: var(--ag-text-bright) !important;
+}
+
+.highlight-color--yellow,
+.rn-editor__rem__body--yellow {
+  background-color: rgba(220, 220, 170, 0.22) !important;
+  border-left: 3px solid var(--ag-yellow) !important;
+  border-radius: 3px;
+  color: var(--ag-text-bright) !important;
+}
+
+.highlight-color--green,
+.rn-editor__rem__body--green {
+  background-color: rgba(46, 160, 67, 0.22) !important;
+  border-left: 3px solid var(--ag-green) !important;
+  border-radius: 3px;
+  color: var(--ag-text-bright) !important;
+}
+
+.highlight-color--blue,
+.rn-editor__rem__body--blue {
+  background-color: rgba(0, 120, 212, 0.22) !important;
+  border-left: 3px solid var(--ag-accent) !important;
+  border-radius: 3px;
+  color: var(--ag-text-bright) !important;
+}
+
+.highlight-color--purple,
+.rn-editor__rem__body--purple {
+  background-color: rgba(197, 134, 192, 0.22) !important;
+  border-left: 3px solid var(--ag-purple) !important;
+  border-radius: 3px;
+  color: var(--ag-text-bright) !important;
+}
+
+/* --------------------------------------------------------------------------
+   10. Popups, Omnibar & Command Menus
+   -------------------------------------------------------------------------- */
+.rn-popup,
+.rn-popup-background,
+.rn-dialog,
+.rn-dialog-background,
+.rn-clr-shadow-menu,
+.rn-sort-popup,
+.rn-floating-toolbar-wrapper,
+.rn-floating-toolbar {
+  background-color: var(--ag-bg-elevated) !important;
+  border: 1px solid var(--ag-border-medium) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65) !important;
+}
+
+/* Omnibar Search list */
+#search-results__list {
+  background-color: var(--ag-bg-elevated) !important;
+}
+
+#search-results__result {
+  color: var(--ag-text-primary) !important;
+  border-radius: 4px;
+  transition: background-color 0.1s ease;
+}
+
+#search-results__result:hover {
+  background-color: var(--ag-bg-hover) !important;
+}
+
+#search-results__result[data-cmdopt-selected="true"] {
+  background-color: var(--ag-accent) !important;
+  color: var(--ag-text-bright) !important;
+}
+
+/* --------------------------------------------------------------------------
+   11. Buttons, Inputs, Checkboxes & Form Controls
+   -------------------------------------------------------------------------- */
+/* Standard Button */
+.rn-button {
+  background-color: var(--ag-bg-input) !important;
+  color: var(--ag-text-primary) !important;
+  border: 1px solid var(--ag-border-medium) !important;
+  border-radius: 4px !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.rn-button:hover {
+  background-color: var(--ag-border-medium) !important;
+  color: var(--ag-text-bright) !important;
+}
+
+/* Primary Button */
+.rn-button--primary,
+.rn-button.rn-button--primary {
+  background-color: var(--ag-accent) !important;
+  color: var(--ag-text-bright) !important;
+  border: 1px solid var(--ag-accent) !important;
+}
+
+.rn-button--primary:hover,
+.rn-button.rn-button--primary:hover {
+  background-color: var(--ag-accent-hover) !important;
+  border-color: var(--ag-accent-hover) !important;
+}
+
+/* Search & Text Inputs */
+input[type="text"],
+input[type="search"],
+textarea,
+.rn-search {
+  background-color: var(--ag-bg-input) !important;
+  border: 1px solid var(--ag-border-medium) !important;
+  color: var(--ag-text-primary) !important;
+  border-radius: 4px !important;
+  padding: 4px 8px !important;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="text"]:focus,
+input[type="search"]:focus,
+textarea:focus,
+.rn-search:focus {
+  border-color: var(--ag-border-focus) !important;
+  box-shadow: 0 0 0 1px var(--ag-border-focus) !important;
+}
+
+/* Checkboxes */
+.rn-checkbox--checked {
+  background-color: var(--ag-accent) !important;
+  border-color: var(--ag-accent) !important;
+  color: var(--ag-text-bright) !important;
+  border-radius: 3px !important;
+}
+
+.rn-checkbox--unchecked {
+  background-color: var(--ag-bg-input) !important;
+  border-color: var(--ag-border-medium) !important;
+  border-radius: 3px !important;
+}
+
+/* Switches */
+.rn-switch {
+  background-color: var(--ag-bg-input) !important;
+  border: 1px solid var(--ag-border-medium) !important;
+  border-radius: 12px !important;
+}
+
+.rn-switch[data-state="checked"] {
+  background-color: var(--ag-accent) !important;
+  border-color: var(--ag-accent) !important;
+}
+
+/* --------------------------------------------------------------------------
+   12. Tables & Grids
+   -------------------------------------------------------------------------- */
+.rn-table-header,
+.rn-column-header {
+  background-color: var(--ag-bg-sidebar) !important;
+  border-color: var(--ag-border-subtle) !important;
+  color: var(--ag-text-bright) !important;
+  font-weight: 600 !important;
+}
+
+.rn-table-row,
+.rn-table-row-container {
+  border-color: var(--ag-border-subtle) !important;
+}
+
+.rn-table-row:hover {
+  background-color: var(--ag-bg-surface) !important;
+}
+
+/* --------------------------------------------------------------------------
+   13. Scrollbars (Clean Antigravity/VS Code Styling)
+   -------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(121, 121, 121, 0.4);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(100, 100, 100, 0.75);
+}

@@ -1,0 +1,17 @@
+{
+  "manifestVersion": 1,
+  "id": "antigravity-dark-theme",
+  "name": "Antigravity Dark Theme",
+  "author": "Rafael Freitas",
+  "repoUrl": "https://github.com/rpfreitasxyz/remnote_theme_plugins",
+  "enableOnMobile": true,
+  "version": {
+    "major": 0,
+    "minor": 1,
+    "patch": 0
+  },
+  "theme": ["dark"],
+  "description": "Antigravity IDE dark theme for RemNote with sleek deep space backgrounds, electric blue accents, and refined typography.",
+  "requestNative": false,
+  "requiredScopes": []
+}
