@@ -38,6 +38,18 @@ python package_theme.py
 
 O script localizará todas as pastas que possuem `manifest.json` e gerará os arquivos `.zip` correspondentes prontos para upload.
 
+## Pré-visualizador
+
+A pasta [`visualizer`](./visualizer/) contém um servidor local que aplica o `theme.css` de qualquer tema sobre uma página do RemNote salva em `.mhtml`, com recarga automática ao salvar o CSS.
+
+Os passos para usar:
+
+1. Salve uma página do RemNote com o navegador (Ctrl+S, formato "Página da Web, único arquivo") como `visualizer.mhtml` na raiz do repositório.
+2. Execute `python visualizer/serve.py` (use `--rebuild` para re-extrair um `.mhtml` novo).
+3. Escolha o tema na barra no canto inferior direito, ou abra `http://127.0.0.1:8765/?theme=antigravity`.
+
+O `.mhtml` e a página extraída contêm dados pessoais e ficam no `.gitignore`.
+
 ## Guia de Instalação no RemNote
 
 Você pode aplicar qualquer tema deste repositório de duas formas:

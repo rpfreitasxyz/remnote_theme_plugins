@@ -6,3 +6,7 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
+
+# Contém dados pessoais do usuário
+visualizer.mhtml
+visualizer/page/
