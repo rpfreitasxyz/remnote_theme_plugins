@@ -148,6 +148,16 @@ body,
   color: var(--vb-text-bright) !important;
 }
 
+.bg-gray-10,
+.dark\:bg-gray-10 {
+  background-color: var(--vb-bg-surface) !important;
+  color: var(--vb-text-bright) !important;
+}
+
+.text-cyan-60 {
+  color: var(--vb-accent) !important;
+}
+
 /* --------------------------------------------------------------------------
    4. Editor, Document & Headings
    -------------------------------------------------------------------------- */
@@ -191,12 +201,14 @@ body,
 /* --------------------------------------------------------------------------
    5. Bullet Threading & Hierarchy Guides (High Visibility)
    -------------------------------------------------------------------------- */
-/* Distinct, crisp vertical threading guide lines through pitch-black */
-.TreeNode,
+/* Ensure root document container never shows a far-left border */
 #hierarchy-editor.TreeNode,
-.tree-node--children,
-.flattened-children,
-.flattened-children-node {
+.flattened-children-node:not(.tree-node--children) {
+  border-left: none !important;
+}
+
+/* Distinct, crisp vertical threading guide lines only on child branches */
+.TreeNode.tree-node--children {
   border-left-color: var(--vb-thread-idle) !important;
   border-left-width: 2px !important;
   border-left-style: solid !important;
@@ -205,10 +217,8 @@ body,
 }
 
 /* Active thread lighting on hover or active branch */
-.TreeNode:hover,
-.TreeNode:focus-within,
-.tree-node--children:hover,
-.tree-node--children:focus-within {
+.TreeNode.tree-node--children:hover,
+.TreeNode.tree-node--children:focus-within {
   border-left-color: var(--vb-thread-active) !important;
   box-shadow: -1px 0 8px var(--vb-thread-glow) !important;
 }
@@ -217,6 +227,11 @@ body,
 .rn-bullet-container,
 .rem-bullet__container {
   opacity: 1 !important;
+}
+
+/* Keep the top phantom "add rem" bullet invisible until hovered */
+.rn-add-rem-button:not(:hover) .rn-bullet-container {
+  opacity: 0 !important;
 }
 
 .rn-rem-bullet,

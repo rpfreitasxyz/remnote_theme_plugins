@@ -1,0 +1,17 @@
+{
+  "manifestVersion": 1,
+  "id": "ergo-dark-theme",
+  "name": "Ergo-Dark (Visual Ergonomics & Cognitive Focus)",
+  "author": "Rafael Freitas",
+  "repoUrl": "https://github.com/rpfreitasxyz/remnote_theme_plugins",
+  "enableOnMobile": true,
+  "version": {
+    "major": 0,
+    "minor": 1,
+    "patch": 0
+  },
+  "theme": ["dark"],
+  "description": "Scientifically calibrated dark theme grounded in visual ergonomics and color theory to minimize asthenopia (eye strain), eliminate halation, and reduce extraneous cognitive load.",
+  "requestNative": false,
+  "requiredScopes": []
+}

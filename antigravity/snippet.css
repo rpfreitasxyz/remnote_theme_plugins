@@ -186,6 +186,11 @@ body,
   transition: color 0.15s ease, transform 0.15s ease;
 }
 
+/* Keep the top phantom "add rem" bullet invisible until hovered */
+.rn-add-rem-button:not(:hover) .rn-bullet-container {
+  opacity: 0 !important;
+}
+
 .rn-bullet-container:hover,
 .rn-rem-icon-bullet:hover {
   color: var(--ag-accent) !important;
@@ -193,8 +198,12 @@ body,
 }
 
 /* Vertical indentation tree lines */
-.TreeNode,
 #hierarchy-editor.TreeNode,
+.flattened-children-node:not(.tree-node--children) {
+  border-left: none !important;
+}
+
+.TreeNode.tree-node--children,
 .rn-fast-rem-container {
   border-color: var(--ag-border-subtle) !important;
 }

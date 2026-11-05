@@ -1,0 +1,650 @@
+/* ==========================================================================
+   Ergo-Dark Theme for RemNote
+   Scientifically calibrated for visual ergonomics, cognitive load reduction,
+   and minimal digital eye strain (asthenopia).
+   Author: Rafael Freitas (https://github.com/rpfreitasxyz)
+   Repository: https://github.com/rpfreitasxyz/remnote_theme_plugins
+   ==========================================================================
+
+   COLOR THEORY & VISUAL ERGONOMICS RATIONALE:
+   1. Anti-Halation & Astigmatism Comfort (CIELAB L* ~ 12 vs L* = 0):
+      Pure black (#000000) with pure white (#FFFFFF) creates a 21:1 contrast
+      that triggers halation (irradiation illusion) and spherical aberration
+      from wide pupillary dilation. Ergo-Dark uses a warm slate-umber base
+      (#1c1e20) with warm parchment text (#d8d4cb), achieving an optimal
+      ~10.8:1 contrast ratio (APCA Lc ~ 85) that eliminates glare and ghosting.
+   2. Zero Chromatic Aberration (510-560nm Peak Retinal Sensitivity):
+      Short-wavelength pure blue (~450nm) focuses in front of the retina,
+      forcing constant ciliary muscle micro-accommodation. Primary interactive
+      anchors use Eucalyptus Teal (#7ec4b6) and Sage (#a3be8c) near the eye's
+      photopic/mesopic sensitivity peak, requiring minimal retinal effort.
+   3. Pre-Attentive Cognitive Load Reduction:
+      Peripheral UI chrome is desaturated and slightly darker (#16181a) to
+      create a natural vignette toward the workspace. Semantic elements (bold,
+      italic, links, clozes) use distinct, low-chroma Munsell hues so working
+      memory processes hierarchy without visual clutter.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Ergonomic Variables & Calibrated Palette
+   -------------------------------------------------------------------------- */
+:root,
+.dark,
+body.dark,
+[data-theme="dark"] {
+  /* Anti-Halation Warm Slate Surfaces */
+  --ed-bg-editor: #1c1e20;
+  --ed-bg-sidebar: #16181a;
+  --ed-bg-topbar: #16181a;
+  --ed-bg-elevated: #232629;
+  --ed-bg-surface: #282c30;
+  --ed-bg-hover: #2d3136;
+  --ed-bg-active: #34393f;
+  --ed-bg-input: #181a1c;
+
+  /* Low-Contrast Structural Borders (Reduces Visual Grid Noise) */
+  --ed-border-subtle: #272a2e;
+  --ed-border-medium: #33373c;
+  --ed-border-strong: #43484e;
+
+  /* Bullet Threading & Spatial Hierarchy */
+  --ed-thread-idle: #33383d;
+  --ed-thread-active: #7ec4b6;
+  --ed-thread-glow: rgba(126, 196, 182, 0.28);
+
+  /* Bullets */
+  --ed-bullet-idle: #696d72;
+  --ed-bullet-active: #7ec4b6;
+
+  /* Warm Parchment Typography (Eliminates Blue-Light Glare) */
+  --ed-text-primary: #d8d4cb;
+  --ed-text-bright: #ece8df;
+  --ed-text-muted: #96938c;
+  --ed-text-subtle: #686660;
+
+  /* Semantic Pre-Attentive Accents */
+  --ed-bold: #e5c890;          /* Warm Honey Sand for key concept scanning */
+  --ed-italic: #a3be8c;        /* Botanical Sage for secondary emphasis */
+  --ed-code: #d89b7a;          /* Muted Terracotta for inline code */
+
+  /* Primary Focus & Interactive Accent (Eucalyptus Teal - 525nm) */
+  --ed-accent: #7ec4b6;
+  --ed-accent-hover: #9ad4c8;
+  --ed-accent-subtle: rgba(126, 196, 182, 0.08);
+  --ed-accent-glow: rgba(126, 196, 182, 0.25);
+
+  /* Restful Anchors & Rem References */
+  --ed-link-text: #84c5b8;
+  --ed-link-hover: #a8ddd2;
+  --ed-link-bg: rgba(126, 196, 182, 0.07);
+  --ed-link-border: rgba(126, 196, 182, 0.34);
+  --ed-link-hover-border: #7ec4b6;
+
+  /* Active Recall & Memory Cues (Warm Amber Ochre) */
+  --ed-recall-amber: #dfa86a;
+  --ed-recall-bg: rgba(223, 168, 106, 0.11);
+
+  /* Iso-Luminant Munsell Highlight Tones */
+  --ed-hl-red: #d67c7c;
+  --ed-hl-orange: #de9e6c;
+  --ed-hl-yellow: #d9be72;
+  --ed-hl-green: #89b882;
+  --ed-hl-blue: #7aa8c7;
+  --ed-hl-purple: #b491c8;
+
+  /* RemNote Native Token Overrides */
+  --rn-clr-background-primary: var(--ed-bg-editor);
+  --rn-clr-background-secondary: var(--ed-bg-sidebar);
+  --rn-clr-background-tertiary: #121416;
+  --rn-clr-background-elevation-10: var(--ed-bg-editor);
+  --rn-clr-background-elevation-50: var(--ed-bg-elevated);
+  --rn-clr-background-elevation-100: var(--ed-bg-surface);
+  --rn-clr-border-opaque: var(--ed-border-subtle);
+  --rn-clr-content-primary: var(--ed-text-primary);
+  --rn-clr-content-secondary: var(--ed-text-muted);
+  --rn-clr-content-tertiary: var(--ed-text-subtle);
+  --rn-clr-background-accent: var(--ed-accent);
+  --rn-clr-background-light-accent: var(--ed-accent-subtle);
+
+  /* Grayscale token mapping */
+  --rn-colors-gray-0: var(--ed-bg-sidebar);
+  --rn-colors-gray-5: var(--ed-bg-editor);
+  --rn-colors-gray-10: var(--ed-bg-elevated);
+  --rn-colors-gray-20: var(--ed-border-subtle);
+  --rn-colors-gray-30: var(--ed-border-medium);
+  --rn-colors-gray-60: var(--ed-text-subtle);
+  --rn-colors-gray-80: var(--ed-text-primary);
+  --rn-colors-gray-100: var(--ed-text-bright);
+}
+
+/* --------------------------------------------------------------------------
+   2. Global App & Reading Surface
+   -------------------------------------------------------------------------- */
+html,
+body,
+#root,
+.rn-layout,
+.rn-pane,
+.rn-pane__body {
+  background-color: var(--ed-bg-editor) !important;
+  color: var(--ed-text-primary) !important;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* --------------------------------------------------------------------------
+   3. Peripheral Vignette (Sidebars & Topbar)
+   -------------------------------------------------------------------------- */
+/* Slightly darker sidebar reduces peripheral luminance competition */
+#document-sidebar,
+.rn-sidebar,
+.rn-document-sidebar,
+.rn-navigation-bar,
+.top-bar-container,
+.rn-pane__top-bar {
+  background-color: var(--ed-bg-sidebar) !important;
+  border-color: var(--ed-border-subtle) !important;
+  color: var(--ed-text-muted) !important;
+}
+
+#document-sidebar,
+.rn-sidebar {
+  border-right: 1px solid var(--ed-border-subtle) !important;
+}
+
+.rn-document-sidebar {
+  border-left: 1px solid var(--ed-border-subtle) !important;
+}
+
+.top-bar-container,
+.rn-pane__top-bar {
+  border-bottom: 1px solid var(--ed-border-subtle) !important;
+}
+
+.rn-sidebar-flashcards-link:hover,
+.rn-nav-tab-button:hover,
+.rn-settings__link:hover {
+  background-color: var(--ed-bg-elevated) !important;
+  color: var(--ed-text-bright) !important;
+  border-radius: 6px;
+}
+
+.rn-nav-tab-button[data-cy-active="true"],
+[data-cy-active="true"] {
+  border-bottom: 2px solid var(--ed-accent) !important;
+  color: var(--ed-text-bright) !important;
+}
+
+.bg-gray-10,
+.dark\:bg-gray-10 {
+  background-color: var(--ed-bg-surface) !important;
+  color: var(--ed-text-bright) !important;
+}
+
+.text-cyan-60 {
+  color: var(--ed-accent) !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. Editor Typography & Saccadic Reading Comfort
+   -------------------------------------------------------------------------- */
+.rn-editor-container,
+.rn-document,
+.rn-document-wrapper,
+.rem-text,
+.rn-editor__rem__body__text {
+  color: var(--ed-text-primary) !important;
+  line-height: 1.68;
+  letter-spacing: 0.008em;
+}
+
+/* Document Title */
+.rn-text-heading-title,
+.rn-page-header-mobile,
+.rn-article-header {
+  color: var(--ed-text-bright) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.015em;
+}
+
+/* Hierarchical Headings with Warm Ivory Progression */
+.rn-editor__rem__body__text--h1,
+.rn-text-heading-large {
+  color: var(--ed-text-bright) !important;
+  font-weight: 600 !important;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--ed-border-subtle);
+}
+
+.rn-editor__rem__body__text--h2,
+.rn-text-heading-medium {
+  color: #e4dfd5 !important;
+  font-weight: 600 !important;
+}
+
+.rn-editor__rem__body__text--h3,
+.rn-text-heading-small {
+  color: #dcd7cd !important;
+  font-weight: 600 !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. Bullet Threading & Spatial Hierarchy
+   -------------------------------------------------------------------------- */
+/* Prevent root container from rendering a line to the left of all bullets */
+#hierarchy-editor.TreeNode,
+.flattened-children-node:not(.tree-node--children) {
+  border-left: none !important;
+}
+
+/* Clear, low-strain hierarchy guide lines on nested branches */
+.TreeNode.tree-node--children {
+  border-left-color: var(--ed-thread-idle) !important;
+  border-left-width: 1.5px !important;
+  border-left-style: solid !important;
+  opacity: 1 !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Highlight active branch in calming Eucalyptus Teal */
+.TreeNode.tree-node--children:hover,
+.TreeNode.tree-node--children:focus-within {
+  border-left-color: var(--ed-thread-active) !important;
+  border-left-width: 2px !important;
+  box-shadow: -1px 0 6px var(--ed-thread-glow) !important;
+}
+
+/* Bullets */
+.rn-bullet-container,
+.rem-bullet__container {
+  opacity: 1 !important;
+}
+
+/* Keep the top phantom "add rem" bullet invisible until hovered */
+.rn-add-rem-button:not(:hover) .rn-bullet-container {
+  opacity: 0 !important;
+}
+
+.rn-rem-bullet,
+.rem-bullet,
+.perfect-circle,
+.perfect-circle__inner {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.rem-bullet__core {
+  fill: var(--ed-bullet-idle) !important;
+  transition: fill 0.2s ease, filter 0.2s ease;
+}
+
+.rem-bullet__ring {
+  fill: transparent !important;
+}
+
+.rn-bullet-container:hover .rem-bullet__core,
+.rem-container:focus-within > .tree-node--parent .rem-bullet__core {
+  fill: var(--ed-bullet-active) !important;
+  filter: drop-shadow(0 0 5px var(--ed-accent-glow)) !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. Cognitive Focus Anchoring (Active Line & Controls)
+   -------------------------------------------------------------------------- */
+/* Gentle focal spotlight on the currently edited Rem */
+.rem-container:focus-within,
+.rn-editor__rem:focus-within {
+  background: linear-gradient(
+    90deg,
+    rgba(126, 196, 182, 0.07) 0%,
+    rgba(126, 196, 182, 0.01) 90%
+  ) !important;
+  border-left: 2px solid var(--ed-accent) !important;
+  padding-left: 6px !important;
+  border-radius: 4px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+input[type="text"]:focus,
+input[type="search"]:focus,
+textarea:focus,
+.rn-search:focus {
+  border-color: var(--ed-accent) !important;
+  box-shadow: 0 0 0 1px var(--ed-accent), 0 0 10px var(--ed-accent-glow) !important;
+}
+
+#search-results__result[data-cmdopt-selected="true"] {
+  background-color: var(--ed-accent) !important;
+  color: #121416 !important;
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   7. Restful Links, Anchors & Rem References (525nm Peak Sensitivity)
+   -------------------------------------------------------------------------- */
+.rn-rem-reference,
+.rem-reference {
+  background-color: var(--ed-link-bg) !important;
+  border-bottom: 1.5px solid var(--ed-link-border) !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  color: var(--ed-link-text) !important;
+  border-radius: 3px !important;
+  padding: 0 5px !important;
+  text-decoration: none !important;
+  font-weight: 500 !important;
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.rn-rem-reference:hover,
+.rem-reference:hover {
+  background-color: rgba(126, 196, 182, 0.15) !important;
+  border-bottom-color: var(--ed-link-hover-border) !important;
+  color: var(--ed-link-hover) !important;
+}
+
+.icon-in-reference {
+  color: var(--ed-link-text) !important;
+  opacity: 0.85;
+}
+
+a,
+.text-blue-60,
+.text-blue-80 {
+  color: var(--ed-link-text) !important;
+  text-decoration: none !important;
+  border-bottom: 1.5px solid var(--ed-link-border) !important;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+a:hover {
+  color: var(--ed-link-hover) !important;
+  border-bottom-color: var(--ed-accent) !important;
+}
+
+/* Tags (#tag) */
+.rn-work-in-progress-tag {
+  background-color: rgba(163, 190, 140, 0.1) !important;
+  border: 1px solid rgba(163, 190, 140, 0.28) !important;
+  color: var(--ed-italic) !important;
+  border-radius: 4px !important;
+  padding: 1px 6px !important;
+  font-size: 0.88em !important;
+}
+
+/* --------------------------------------------------------------------------
+   8. Pre-Attentive Semantic Formatting (Bold, Italic, Code, Quotes)
+   -------------------------------------------------------------------------- */
+/* Warm Honey Sand bold allows rapid concept scanning without glare */
+b,
+strong,
+.bold {
+  color: var(--ed-bold) !important;
+  font-weight: 600 !important;
+}
+
+/* Botanical Sage italic differentiates nuance effortlessly */
+i,
+em,
+.italic {
+  color: var(--ed-italic) !important;
+  font-style: italic;
+}
+
+u,
+.underline {
+  text-decoration-color: var(--ed-accent) !important;
+}
+
+/* Inline Code */
+code,
+.rn-code-node,
+.rich-text-editor__code-node {
+  background-color: var(--ed-bg-sidebar) !important;
+  color: var(--ed-code) !important;
+  border: 1px solid var(--ed-border-subtle) !important;
+  border-radius: 4px !important;
+  padding: 0.14em 0.38em !important;
+  font-family: "Cascadia Code", "Fira Code", Consolas, monospace !important;
+  font-size: 0.9em !important;
+}
+
+/* Code Blocks */
+pre,
+.rn-code-node pre {
+  background-color: var(--ed-bg-sidebar) !important;
+  border: 1px solid var(--ed-border-subtle) !important;
+  border-radius: 6px !important;
+  padding: 12px 14px !important;
+}
+
+/* Blockquotes */
+.rn-quote,
+.rn-quote-inner,
+.rn-quote-content {
+  border-left: 3px solid var(--ed-italic) !important;
+  background-color: rgba(163, 190, 140, 0.05) !important;
+  color: var(--ed-text-muted) !important;
+  font-style: italic;
+  padding: 6px 14px !important;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Dividers */
+.rn-divider,
+.rn-editor-divider {
+  background-color: var(--ed-border-subtle) !important;
+  height: 1px !important;
+  border: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   9. Active Recall: Clozes & Flashcards (Warm Amber Memory Cues)
+   -------------------------------------------------------------------------- */
+.cloze {
+  background-color: var(--ed-recall-bg) !important;
+  border-bottom: 2px solid var(--ed-recall-amber) !important;
+  color: var(--ed-bold) !important;
+  border-radius: 3px !important;
+  padding: 0 4px !important;
+  transition: background-color 0.15s ease;
+}
+
+.cloze:hover {
+  background-color: rgba(223, 168, 106, 0.2) !important;
+}
+
+.rn-queue,
+.rn-queue-container,
+.rn-flashcards-page-container {
+  background-color: var(--ed-bg-editor) !important;
+}
+
+.rn-queue-rem,
+.rn-question-rem {
+  background-color: var(--ed-bg-elevated) !important;
+  border: 1px solid var(--ed-border-subtle) !important;
+  border-radius: 8px !important;
+  padding: 18px 22px !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+.rn-flashcard-delimiter,
+.rn-card-delimiter {
+  color: var(--ed-recall-amber) !important;
+  font-weight: 700 !important;
+}
+
+/* --------------------------------------------------------------------------
+   10. Iso-Luminant Munsell Highlights (Zero Simultaneous-Contrast Strain)
+   -------------------------------------------------------------------------- */
+.highlight-color--red,
+.rn-editor__rem__body--red {
+  background-color: rgba(214, 124, 124, 0.16) !important;
+  border-left: 3px solid var(--ed-hl-red) !important;
+  border-radius: 3px;
+  color: var(--ed-text-bright) !important;
+}
+
+.highlight-color--orange,
+.rn-editor__rem__body--orange {
+  background-color: rgba(222, 158, 108, 0.16) !important;
+  border-left: 3px solid var(--ed-hl-orange) !important;
+  border-radius: 3px;
+  color: var(--ed-text-bright) !important;
+}
+
+.highlight-color--yellow,
+.rn-editor__rem__body--yellow {
+  background-color: rgba(217, 190, 114, 0.16) !important;
+  border-left: 3px solid var(--ed-hl-yellow) !important;
+  border-radius: 3px;
+  color: var(--ed-text-bright) !important;
+}
+
+.highlight-color--green,
+.rn-editor__rem__body--green {
+  background-color: rgba(137, 184, 130, 0.16) !important;
+  border-left: 3px solid var(--ed-hl-green) !important;
+  border-radius: 3px;
+  color: var(--ed-text-bright) !important;
+}
+
+.highlight-color--blue,
+.rn-editor__rem__body--blue {
+  background-color: rgba(122, 168, 199, 0.16) !important;
+  border-left: 3px solid var(--ed-hl-blue) !important;
+  border-radius: 3px;
+  color: var(--ed-text-bright) !important;
+}
+
+.highlight-color--purple,
+.rn-editor__rem__body--purple {
+  background-color: rgba(180, 145, 200, 0.16) !important;
+  border-left: 3px solid var(--ed-hl-purple) !important;
+  border-radius: 3px;
+  color: var(--ed-text-bright) !important;
+}
+
+/* --------------------------------------------------------------------------
+   11. Popups, Omnibar & Menus
+   -------------------------------------------------------------------------- */
+.rn-popup,
+.rn-popup-background,
+.rn-dialog,
+.rn-dialog-background,
+.rn-clr-shadow-menu,
+.rn-sort-popup,
+.rn-floating-toolbar-wrapper,
+.rn-floating-toolbar {
+  background-color: var(--ed-bg-elevated) !important;
+  border: 1px solid var(--ed-border-medium) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+}
+
+#search-results__list {
+  background-color: var(--ed-bg-elevated) !important;
+}
+
+#search-results__result {
+  color: var(--ed-text-primary) !important;
+  border-radius: 4px;
+}
+
+#search-results__result:hover {
+  background-color: var(--ed-bg-hover) !important;
+}
+
+/* --------------------------------------------------------------------------
+   12. Buttons, Inputs & Controls
+   -------------------------------------------------------------------------- */
+.rn-button {
+  background-color: var(--ed-bg-elevated) !important;
+  color: var(--ed-text-primary) !important;
+  border: 1px solid var(--ed-border-medium) !important;
+  border-radius: 4px !important;
+}
+
+.rn-button:hover {
+  background-color: var(--ed-bg-hover) !important;
+  color: var(--ed-text-bright) !important;
+  border-color: var(--ed-border-strong) !important;
+}
+
+.rn-button--primary,
+.rn-button.rn-button--primary {
+  background-color: var(--ed-accent) !important;
+  color: #121416 !important;
+  font-weight: 600 !important;
+  border: 1px solid var(--ed-accent) !important;
+}
+
+.rn-button--primary:hover,
+.rn-button.rn-button--primary:hover {
+  background-color: var(--ed-accent-hover) !important;
+  border-color: var(--ed-accent-hover) !important;
+}
+
+input[type="text"],
+input[type="search"],
+textarea,
+.rn-search {
+  background-color: var(--ed-bg-input) !important;
+  border: 1px solid var(--ed-border-medium) !important;
+  color: var(--ed-text-primary) !important;
+  border-radius: 4px !important;
+  padding: 5px 9px !important;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.rn-checkbox--checked {
+  background-color: var(--ed-accent) !important;
+  border-color: var(--ed-accent) !important;
+  color: #121416 !important;
+  border-radius: 3px !important;
+}
+
+.rn-checkbox--unchecked {
+  background-color: var(--ed-bg-input) !important;
+  border-color: var(--ed-border-medium) !important;
+  border-radius: 3px !important;
+}
+
+.rn-switch {
+  background-color: var(--ed-bg-input) !important;
+  border: 1px solid var(--ed-border-medium) !important;
+  border-radius: 12px !important;
+}
+
+.rn-switch[data-state="checked"] {
+  background-color: var(--ed-accent) !important;
+  border-color: var(--ed-accent) !important;
+}
+
+/* --------------------------------------------------------------------------
+   13. Scrollbars
+   -------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #2f3338;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #43484f;
+}

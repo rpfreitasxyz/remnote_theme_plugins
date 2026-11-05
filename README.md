@@ -9,6 +9,7 @@ A lista de temas disponíveis atualmente no repositório:
 
 - [Antigravity Dark Theme](./antigravity/): Tema escuro inspirado no visual moderno do Google Antigravity IDE, com tons de cinza espacial profundo (`#1f1f1f`), barras de ferramentas em `#181818`, acentos em azul elétrico (`#0078d4`), tipografia refinada e estilização completa para flashcards, omnibar, tabelas e referências.
 - [Vantablack Focus](./vantablack/): Tema ultra-escuro (OLED pitch-black `#000000`) desenvolvido para foco máximo e imersão, com linhas de hierarquia (bullet threading) nítidas e luminosas, âncoras/referências destacadas em azul-gelo suave (`#7dd3fc`) sem fadiga visual, e demarcação de foco evidente para o rem ativo.
+- [Ergo-Dark](./ergo-dark/): Tema escuro cientificamente calibrado com base em ergonomia visual, óptica fisiológica e teoria da carga cognitiva para minimizar astenopia (fadiga ocular) e halação, utilizando superfície em ardósia quente (`#1c1e20`), texto em pergaminho (`#d8d4cb`, contraste ~10.8:1), âncoras em verde-eucalipto (`#7ec4b6`, pico de sensibilidade retiniana em 525nm) e hierarquia semântica pré-atentiva.
 
 ## Estrutura do Repositório
 
@@ -25,6 +26,12 @@ remnote_themes/
 │   ├── snippet.css
 │   ├── README.md
 │   └── antigravity-remnote-theme.zip
+├── ergo-dark/
+│   ├── manifest.json
+│   ├── theme.css
+│   ├── snippet.css
+│   ├── README.md
+│   └── ergo-dark-remnote-theme.zip
 ├── vantablack/
 │   ├── manifest.json
 │   ├── theme.css

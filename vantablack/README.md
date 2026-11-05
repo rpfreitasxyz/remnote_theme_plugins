@@ -55,3 +55,4 @@ Os passos para colar o código diretamente no RemNote:
 
 Distribuído sob a licença MIT.
 Consulte o arquivo `LICENSE` na raiz do repositório.
+
